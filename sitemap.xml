@@ -3,13 +3,13 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/</loc>
-    <lastmod>2017-11-22T15:56:22+08:00</lastmod>
+    <loc>https://ariesdevil.com/about/</loc>
+    <lastmod>2017-11-20T20:49:53+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://ariesdevil.com/about/</loc>
-    <lastmod>2017-11-20T20:49:53+08:00</lastmod>
+    <loc>https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/</loc>
+    <lastmod>2014-06-01T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -19,25 +19,31 @@
   
   <url>
     <loc>https://ariesdevil.com/tags/golang/</loc>
-    <lastmod>2017-11-22T15:56:22+08:00</lastmod>
+    <lastmod>2014-06-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://ariesdevil.com/post/</loc>
-    <lastmod>2017-11-22T15:56:22+08:00</lastmod>
+    <lastmod>2014-06-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://ariesdevil.com/categories/programming-language/</loc>
+    <lastmod>2014-06-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://ariesdevil.com/tags/</loc>
-    <lastmod>2017-11-22T15:56:22+08:00</lastmod>
+    <lastmod>2014-06-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://ariesdevil.com/</loc>
-    <lastmod>2017-11-22T15:56:22+08:00</lastmod>
+    <lastmod>2017-11-20T20:49:53+08:00</lastmod>
     <priority>0</priority>
   </url>
   

@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>All rights reserved - 2017</copyright>
-    <lastBuildDate>Wed, 22 Nov 2017 15:56:22 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 22 May 2014 15:56:22 +0800</lastBuildDate>
     
 	<atom:link href="https://ariesdevil.com/post/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,7 +15,7 @@
     <item>
       <title>Go 语言中的 new() 和 make() 的区别</title>
       <link>https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/</link>
-      <pubDate>Wed, 22 Nov 2017 15:56:22 +0800</pubDate>
+      <pubDate>Thu, 22 May 2014 15:56:22 +0800</pubDate>
       
       <guid>https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/</guid>
       <description>&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
