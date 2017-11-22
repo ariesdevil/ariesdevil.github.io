@@ -172,7 +172,7 @@ ga('send', 'pageview');
                 
                   <span class="post-meta">
   发表于 May 22, 2014
-  字数 : 633  阅读时间 : 2 分钟
+  字数 : 615  阅读时间 : 2 分钟
   
 </span>
 
@@ -199,10 +199,8 @@ ga('send', 'pageview');
 <h2 id="new-的主要特性">new 的主要特性</h2>
 
 <p>首先 <code>new</code> 是内建函数，你可以从 <a href="http://golang.org/pkg/builtin/#new">http://golang.org/pkg/builtin/#new</a> 这儿看到它，它的定义也很简单：</p>
-
-<pre><code>func new(Type) *Type
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="s3e8">func</span><span class="s1f40"> </span><span class="s7d0">new</span><span class="s1388">(</span><span class="s7df">Type</span><span class="s1388">)</span><span class="s1f40"> </span><span class="sfa0">*</span><span class="s7df">Type</span></code></pre>
+</div>
 <p>官方文档对于它的描述是：</p>
 
 <blockquote>
@@ -210,24 +208,20 @@ ga('send', 'pageview');
 </blockquote>
 
 <p>根据这段描述，我们可以自己实现一个类似 <code>new</code> 的功能：</p>
-
-<pre><code>func newInt() *int {
-  var i int
-  return &amp;i
-}
-
-someInt := newInt()
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="s3e8">func</span><span class="s1f40"> </span><span class="s7df">newInt</span><span class="s1388">()</span><span class="s1f40"> </span><span class="sfa0">*</span><span class="s3e8">int</span><span class="s1f40"> </span><span class="s1388">{</span><span class="s1f40">
+</span><span class="s1f40">  </span><span class="s3e8">var</span><span class="s1f40"> </span><span class="s7df">i</span><span class="s1f40"> </span><span class="s3e8">int</span><span class="s1f40">
+</span><span class="s1f40">  </span><span class="s3e8">return</span><span class="s1f40"> </span><span class="sfa0">&amp;</span><span class="s7df">i</span><span class="s1f40">
+</span><span class="s1f40"></span><span class="s1388">}</span><span class="s1f40">
+</span><span class="s1f40">
+</span><span class="s1f40"></span><span class="s7df">someInt</span><span class="s1f40"> </span><span class="sfa0">:=</span><span class="s1f40"> </span><span class="s7df">newInt</span><span class="s1388">()</span></code></pre>
+</div>
 <p>我们这个函数的功能跟 <code>someInt := new(int)</code> 一模一样。所以在我们自己定义 new 开头的函数时，出于约定也应该返回类型的指针。</p>
 
 <h2 id="make-的主要特性">make 的主要特性</h2>
 
 <p><code>make</code> 也是内建函数，你可以从 <a href="http://golang.org/pkg/builtin/#make">http://golang.org/pkg/builtin/#make</a> 这儿看到它，它的定义比 <code>new</code> 多了一个参数，返回值也不同：</p>
-
-<pre><code>func make(Type, size IntegerType) Type
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="s3e8">func</span><span class="s1f40"> </span><span class="s7d0">make</span><span class="s1388">(</span><span class="s7df">Type</span><span class="s1388">,</span><span class="s1f40"> </span><span class="s7df">size</span><span class="s1f40"> </span><span class="s7df">IntegerType</span><span class="s1388">)</span><span class="s1f40"> </span><span class="s7df">Type</span></code></pre>
+</div>
 <p>官方文档对于它的描述是：</p>
 
 <blockquote>
