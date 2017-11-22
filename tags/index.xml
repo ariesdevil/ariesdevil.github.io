@@ -6,9 +6,20 @@
     <description>Recent content in Tags on 髣髴兮若輕雲之蔽月</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
+    <copyright>All rights reserved - 2017</copyright>
+    <lastBuildDate>Wed, 22 Nov 2017 15:56:22 +0800</lastBuildDate>
     
 	<atom:link href="https://ariesdevil.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Golang</title>
+      <link>https://ariesdevil.com/tags/golang/</link>
+      <pubDate>Wed, 22 Nov 2017 15:56:22 +0800</pubDate>
+      
+      <guid>https://ariesdevil.com/tags/golang/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>

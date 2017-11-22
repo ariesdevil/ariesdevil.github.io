@@ -5,18 +5,30 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <title>404 Page not found</title>
-  <meta property="og:title" content="404 Page not found" />
-  <meta name="twitter:title" content="404 Page not found" />
+  <title>Go 语言中的 new() 和 make() 的区别</title>
+  <meta property="og:title" content="Go 语言中的 new() 和 make() 的区别" />
+  <meta name="twitter:title" content="Go 语言中的 new() 和 make() 的区别" />
+  <meta name="description" content="概述
+
+Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。
+">
+  <meta property="og:description" content="概述
+
+Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。
+">
+  <meta name="twitter:description" content="概述
+
+Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。
+">
   <meta name="author" content=""/>
   <meta name="twitter:card" content="summary" />
-  <meta property="og:url" content="https://ariesdevil.com/" />
+  <meta property="og:url" content="https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="髣髴兮若輕雲之蔽月" />
 
   <meta name="generator" content="Hugo 0.29" />
-  <link rel="canonical" href="https://ariesdevil.com/" />
-  <link rel="alternate" href="https://ariesdevil.com/index.xml" type="application/rss+xml" title="髣髴兮若輕雲之蔽月">
+  <link rel="canonical" href="https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/" />
+  <link rel="alternate" href="" type="application/rss+xml" title="髣髴兮若輕雲之蔽月">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -124,14 +136,113 @@
 
 
     
+  
+  
+  
+
+
+
+
+  
+
+  <header class="header-section ">
     
-  <div role="main" class="container main-content">
-    <div class="text-center">
-      <h1>Whoops, this page doesn&#39;t exist. Move along. (404 error)</h1>
-      <br/>
-      <img src="https://ariesdevil.com//img/404-southpark.jpg" />
+    <div class="intro-header no-img">
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              <h1>Go 语言中的 new() 和 make() 的区别</h1>
+                
+                
+                  <span class="post-meta">
+  Posted on November 22, 2017
+  
+</span>
+
+
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <h2 id="概述">概述</h2>
+
+<p>Go 语言中的 <code>new</code> 和 <code>make</code> 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。
+</p>
+
+<h2 id="new-的主要特性">new 的主要特性</h2>
+
+<p>首先 <code>new</code> 是内建函数，你可以从 <a href="http://golang.org/pkg/builtin/#new">http://golang.org/pkg/builtin/#new</a> 这儿看到它，它的定义也很简单：</p>
+
+<pre><code>func new(Type) *Type
+</code></pre>
+
+<p>官方文档对于它的描述是：</p>
+
+<blockquote>
+<p>内建函数 <code>new</code> 用来分配内存，它的第一个参数是一个类型，不是一个值，它的返回值是一个指向新分配类型零值的指针</p>
+</blockquote>
+
+<p>根据这段描述，我们可以自己实现一个类似 <code>new</code> 的功能：</p>
+
+<pre><code>func newInt() *int {
+  var i int
+  return &amp;i
+}
+
+someInt := newInt()
+</code></pre>
+
+<p>我们这个函数的功能跟 <code>someInt := new(int)</code> 一模一样。所以在我们自己定义 new 开头的函数时，出于约定也应该返回类型的指针。</p>
+
+<h2 id="make-的主要特性">make 的主要特性</h2>
+
+<p><code>make</code> 也是内建函数，你可以从 <a href="http://golang.org/pkg/builtin/#make">http://golang.org/pkg/builtin/#make</a> 这儿看到它，它的定义比 <code>new</code> 多了一个参数，返回值也不同：</p>
+
+<pre><code>func make(Type, size IntegerType) Type
+</code></pre>
+
+<p>官方文档对于它的描述是：</p>
+
+<blockquote>
+<p>内建函数 <code>make</code> 用来为 <code>slice</code>，<code>map</code> 或 <code>chan</code> 类型分配内存和初始化一个对象(<strong>注意</strong>：只能用在这三种类型上)，跟 <code>new</code> 类似，第一个参数也是一个类型而不是一个值，跟 <code>new</code> 不同的是，<code>make</code> 返回类型的引用而不是指针，而返回值也依赖于具体传入的类型，具体说明如下：</p>
+</blockquote>
+
+<pre><code>Slice: 第二个参数 size 指定了它的长度，它的容量和长度相同。
+你可以传入第三个参数来指定不同的容量值，但必须不能比长度值小。
+比如 make([]int, 0, 10)
+
+Map: 根据 size 大小来初始化分配内存，不过分配后的 map 长度为 0，如果 size 被忽略了，那么会在初始化分配内存时分配一个小尺寸的内存
+
+Channel: 管道缓冲区依据缓冲区容量被初始化。如果容量为 0 或者忽略容量，管道是没有缓冲区的
+</code></pre>
+
+<h2 id="总结">总结</h2>
+
+<p><code>new</code> 的作用是初始化一个指向类型的指针(<code>*T</code>)，<code>make</code> 的作用是为 <code>slice</code>，<code>map</code> 或 <code>chan</code> 初始化并返回引用(<code>T</code>)。</p>
+      </article>
+
+      <ul class="pager blog-pager">
+        
+        
+      </ul>
+
+      
+
     </div>
   </div>
+</div>
 
     <footer>
   <div class="container">
