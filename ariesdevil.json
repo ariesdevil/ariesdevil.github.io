@@ -6,6 +6,24 @@
         "draft": false
     },
     {
+        "title": "Go 语言方法接受者类型的选择",
+        "uri": "post/choose-whether-to-use-a-value-or-pointer-receiver-on-methods",
+        "date": "2015-11-23T06:06:35.000Z",
+        "draft": false,
+        "tags": [
+            "golang"
+        ],
+        "categories": [
+            "Programming Language"
+        ],
+        "share": true,
+        "isCJKLanguage": true,
+        "comments": true,
+        "keywords": [
+            "method receiver"
+        ]
+    },
+    {
         "title": "探索 Rust 的所有权机制(Ownership System)",
         "uri": "post/explore-the-ownership-system-in-rust",
         "date": "2015-01-28T07:56:22.000Z",

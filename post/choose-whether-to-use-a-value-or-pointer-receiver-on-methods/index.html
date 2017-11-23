@@ -5,18 +5,30 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <title>Tags</title>
-  <meta property="og:title" content="Tags" />
-  <meta name="twitter:title" content="Tags" />
+  <title>Go 语言方法接受者类型的选择</title>
+  <meta property="og:title" content="Go 语言方法接受者类型的选择" />
+  <meta name="twitter:title" content="Go 语言方法接受者类型的选择" />
+  <meta name="description" content="概述
+
+很多人(特别是新手)在写 Go 语言代码时经常会问一个问题，那就是一个方法的接受者类型到底应该是值类型还是指针类型呢，Go 的 wiki 上对这点做了很好的解释，我来翻译一下。
+">
+  <meta property="og:description" content="概述
+
+很多人(特别是新手)在写 Go 语言代码时经常会问一个问题，那就是一个方法的接受者类型到底应该是值类型还是指针类型呢，Go 的 wiki 上对这点做了很好的解释，我来翻译一下。
+">
+  <meta name="twitter:description" content="概述
+
+很多人(特别是新手)在写 Go 语言代码时经常会问一个问题，那就是一个方法的接受者类型到底应该是值类型还是指针类型呢，Go 的 wiki 上对这点做了很好的解释，我来翻译一下。
+">
   <meta name="author" content=""/>
   <meta name="twitter:card" content="summary" />
-  <meta property="og:url" content="https://ariesdevil.com/tags/" />
+  <meta property="og:url" content="https://ariesdevil.com/post/choose-whether-to-use-a-value-or-pointer-receiver-on-methods/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="髣髴兮若輕雲之蔽月" />
 
   <meta name="generator" content="Hugo 0.32-DEV" />
-  <link rel="canonical" href="https://ariesdevil.com/tags/" />
-  <link rel="alternate" href="https://ariesdevil.com/tags/index.xml" type="application/rss+xml" title="髣髴兮若輕雲之蔽月">
+  <link rel="canonical" href="https://ariesdevil.com/post/choose-whether-to-use-a-value-or-pointer-receiver-on-methods/" />
+  <link rel="alternate" href="" type="application/rss+xml" title="髣髴兮若輕雲之蔽月">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -213,9 +225,26 @@ autocomplete('#aa-search-input',
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="tags-heading">
-              <h1>Tags</h1>
+            <div class="post-heading">
+              <h1>Go 语言方法接受者类型的选择</h1>
                 
+                
+                  <span class="post-meta">
+  <br> 
+  发表于 November 23, 2015
+  字数 : 837  阅读时间 : 2 分钟<br>
+  
+  <span class="post-meta">
+    标签 : 
+    
+      #<a href="https://ariesdevil.com/tags/golang/">golang</a>&nbsp;
+    
+  </span>
+  
+  
+</span>
+
+
                 
             </div>
           </div>
@@ -226,23 +255,85 @@ autocomplete('#aa-search-input',
 
 
     
-  
-  <div class="container" role="main">
-    <article class="post-preview">
-      <div class="list-group col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3">
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <h2 id="概述">概述</h2>
+
+<p>很多人(特别是新手)在写 Go 语言代码时经常会问一个问题，那就是一个方法的接受者类型到底应该是值类型还是指针类型呢，Go 的 wiki 上对这点做了很好的解释，我来翻译一下。
+</p>
+
+<h2 id="何时使用值类型">何时使用值类型</h2>
+
+<ul>
+<li>如果接受者是一个 <code>map</code>，<code>func</code> 或者 <code>chan</code>，使用值类型(因为它们本身就是引用类型)。</li>
+<li>如果接受者是一个 <code>slice</code>，并且方法不执行 <code>reslice</code> 操作，也不重新分配内存给 <code>slice</code>，使用值类型。</li>
+<li>如果接受者是一个小的数组或者原生的值类型结构体类型(比如 <code>time.Time</code> 类型)，而且没有可修改的字段和指针，又或者接受者是一个简单地基本类型像是 <code>int</code> 和 <code>string</code>，使用值类型就好了。</li>
+</ul>
+
+<p>一个值类型的接受者可以减少一定数量的垃圾生成，如果一个值被传入一个值类型接受者的方法，一个栈上的拷贝会替代在堆上分配内存(但不是保证一定成功)，所以在没搞明白代码想干什么之前，别因为这个原因而选择值类型接受者。</p>
+
+<h2 id="何时使用指针类型">何时使用指针类型</h2>
+
+<ul>
+<li>如果方法需要修改接受者，接受者必须是指针类型。</li>
+<li>如果接受者是一个包含了 <code>sync.Mutex</code> 或者类似同步字段的结构体，接受者必须是指针，这样可以避免拷贝。</li>
+<li>如果接受者是一个大的结构体或者数组，那么指针类型接受者更有效率。(多大算大呢？假设把接受者的所有元素作为参数传给方法，如果你觉得参数有点多，那么它就是大)。</li>
+<li>从此方法中并发的调用函数和方法时，接受者可以被修改吗？一个值类型的接受者当方法调用时会创建一份拷贝，所以外部的修改不能作用到这个接受者上。如果修改必须被原始的接受者可见，那么接受者必须是指针类型。</li>
+<li>如果接受者是一个结构体，数组或者 <code>slice</code>，它们中任意一个元素是指针类型而且可能被修改，建议使用指针类型接受者，这样会增加程序的可读性</li>
+</ul>
+
+<p>当你看完这个还是有疑虑，还是不知道该使用哪种接受者，那么记住使用指针接受者。</p>
+
+<h2 id="关于接受者的命名">关于接受者的命名</h2>
+
+<p>社区约定的接受者命名是类型的一个或两个字母的缩写(像 <code>c</code> 或者 <code>cl</code> 对于 <code>Client</code>)。不要使用泛指的名字像是 <code>me</code>，<code>this</code> 或者 <code>self</code>，也不要使用过度描述的名字，最后，如果你在一个地方使用了 <code>c</code>，那么就不要在别的地方使用 <code>cl</code>。</p>
+      </article>
+
+      <ul class="pager blog-pager">
+        
+          <li class="previous">
+            <a href="https://ariesdevil.com/post/explore-the-ownership-system-in-rust/" data-toggle="tooltip" data-placement="top" title="探索 Rust 的所有权机制(Ownership System)">&larr; 前一篇</a>
+          </li>
+        
+        
+          <li class="next">
+            <a href="https://ariesdevil.com/post/methods-interfaces-and-embedded-type-in-golang/" data-toggle="tooltip" data-placement="top" title="Go 语言中的方法，接口和嵌入类型">后一篇 &rarr;</a>
+          </li>
+        
+      </ul>
+
       
-      <a href="https://ariesdevil.com/tags/golang/" class="list-group-item">
-          golang<span class="badge">3</span></a>
+        
+          <div class="disqus-comments">
+            <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "ariesdevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+          </div>
+        
       
-      <a href="https://ariesdevil.com/tags/memory-management/" class="list-group-item">
-          memory-management<span class="badge">1</span></a>
-      
-      <a href="https://ariesdevil.com/tags/rust/" class="list-group-item">
-          rust<span class="badge">1</span></a>
-      
-      </div>
-    </article>
+
+    </div>
   </div>
+</div>
 
     <footer>
   <div class="container">

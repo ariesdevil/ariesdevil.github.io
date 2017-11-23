@@ -32,6 +32,18 @@
     </item>
     
     <item>
+      <title>Go 语言方法接受者类型的选择</title>
+      <link>https://ariesdevil.com/post/choose-whether-to-use-a-value-or-pointer-receiver-on-methods/</link>
+      <pubDate>Mon, 23 Nov 2015 14:06:35 +0800</pubDate>
+      
+      <guid>https://ariesdevil.com/post/choose-whether-to-use-a-value-or-pointer-receiver-on-methods/</guid>
+      <description>&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
+
+&lt;p&gt;很多人(特别是新手)在写 Go 语言代码时经常会问一个问题，那就是一个方法的接受者类型到底应该是值类型还是指针类型呢，Go 的 wiki 上对这点做了很好的解释，我来翻译一下。
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>探索 Rust 的所有权机制(Ownership System)</title>
       <link>https://ariesdevil.com/post/explore-the-ownership-system-in-rust/</link>
       <pubDate>Wed, 28 Jan 2015 15:56:22 +0800</pubDate>
