@@ -1,0 +1,48 @@
+[
+    {
+        "title": "About",
+        "uri": "about",
+        "date": "2017-11-20T12:49:53.000Z",
+        "draft": false
+    },
+    {
+        "title": "探索 Rust 的所有权机制(Ownership System)",
+        "uri": "post/explore-the-ownership-system-in-rust",
+        "date": "2015-01-28T07:56:22.000Z",
+        "draft": false,
+        "tags": [
+            "rust",
+            "memory management"
+        ],
+        "categories": [
+            "Programming Language"
+        ],
+        "share": true,
+        "isCJKLanguage": true,
+        "comments": true,
+        "keywords": [
+            "ownership",
+            "memory management"
+        ]
+    },
+    {
+        "title": "Go 语言中的 new() 和 make() 的区别",
+        "uri": "post/the-difference-between-function-new-and-make-in-golang",
+        "date": "2014-05-22T07:56:22.000Z",
+        "lastmod": "2014-06-01T00:00:00.000Z",
+        "draft": false,
+        "tags": [
+            "golang"
+        ],
+        "categories": [
+            "Programming Language"
+        ],
+        "share": true,
+        "isCJKLanguage": true,
+        "comments": true,
+        "keywords": [
+            "new",
+            "make"
+        ]
+    }
+]
