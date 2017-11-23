@@ -19,6 +19,7 @@
         ],
         "share": true,
         "isCJKLanguage": true,
+        "comments": true,
         "keywords": [
             "method receiver"
         ]
