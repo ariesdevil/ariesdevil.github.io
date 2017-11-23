@@ -17,6 +17,7 @@
 如果编译器接受这样的定义，那么当接口调用时编译器要怎么确定该使用哪个实现？
 
 
+
 在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。
 ">
   <meta property="og:description" content="概述
@@ -26,6 +27,7 @@
 
 编译器会因为我们同时有两个接口实现而报错吗？
 如果编译器接受这样的定义，那么当接口调用时编译器要怎么确定该使用哪个实现？
+
 
 
 在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。
@@ -39,10 +41,13 @@
 如果编译器接受这样的定义，那么当接口调用时编译器要怎么确定该使用哪个实现？
 
 
+
 在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。
 ">
-  <meta name="author" content=""/>
+  <meta name="author" content="AriesDevil"/>
   <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@ariesdevil77" />
+  <meta name="twitter:creator" content="@ariesdevil77" />
   <meta property="og:url" content="https://ariesdevil.com/post/methods-interfaces-and-embedded-type-in-golang/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="髣髴兮若輕雲之蔽月" />
@@ -310,16 +315,17 @@ autocomplete('#aa-search-input',
 <p>在 Go 语言中，如果一个结构体和一个嵌入字段同时实现了相同的接口会发生什么呢？我们猜一下，可能有两个问题：</p>
 
 <ul>
-<li>编译器会因为我们同时有两个接口实现而报错吗？</li>
-<li>如果编译器接受这样的定义，那么当接口调用时编译器要怎么确定该使用哪个实现？</li>
+<li>编译器会因为我们同时有两个接口实现而报错吗？<br /></li>
+<li>如果编译器接受这样的定义，那么当接口调用时编译器要怎么确定该使用哪个实现？<br />
+<br /></li>
 </ul>
 
-<p>在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。
+<p>在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。<br />
 </p>
 
 <h2 id="方法">方法</h2>
 
-<p>Go 语言中同时有函数和方法。一个方法就是一个包含了<a href="http://golang.org/ref/spec#Method_declarations">接受者</a>的函数，接受者可以是<a href="http://golang.org/ref/spec#Types">命名类型</a>或者<a href="http://golang.org/ref/spec#Struct_types">结构体</a>类型的一个值或者是一个指针。所有给定类型的方法属于该类型的方法集。</p>
+<p>Go 语言中同时有函数和方法。一个方法就是一个包含了<a href="http://golang.org/ref/spec#Method_declarations" target="_blank">接受者</a>的函数，接受者可以是<a href="http://golang.org/ref/spec#Types" target="_blank">命名类型</a>或者<a href="http://golang.org/ref/spec#Struct_types" target="_blank">结构体</a>类型的一个值或者是一个指针。所有给定类型的方法属于该类型的方法集。</p>
 
 <p>下面定义一个结构体类型和该类型的一个方法：</p>
 
@@ -352,7 +358,7 @@ autocomplete('#aa-search-input',
 </div>
 </div>
 
-<p>在这个例子中当我们使用指针时，Go <a href="http://golang.org/ref/spec#Calls">调整</a>和解引用指针使得调用可以被执行。<strong><em>注意</em></strong>，当接受者不是一个指针时，该方法操作对应接受者的值的副本(意思就是即使你使用了指针调用函数，但是函数的接受者是值类型，所以函数内部操作还是对副本的操作，而不是指针操作，参见：<a href="http://play.golang.org/p/DBhWU0p1Pv">http://play.golang.org/p/DBhWU0p1Pv</a>)。</p>
+<p>在这个例子中当我们使用指针时，Go <a href="http://golang.org/ref/spec#Calls" target="_blank">调整</a>和解引用指针使得调用可以被执行。<strong><em>注意</em></strong>，当接受者不是一个指针时，该方法操作对应接受者的值的副本(意思就是即使你使用了指针调用函数，但是函数的接受者是值类型，所以函数内部操作还是对副本的操作，而不是指针操作，参见：<a href="http://play.golang.org/p/DBhWU0p1Pv" target="_blank">http://play.golang.org/p/DBhWU0p1Pv</a>)。</p>
 
 <p>我们可以修改 <code>Notify</code> 方法，让它的接受者使用指针类型：</p>
 
@@ -364,7 +370,7 @@ autocomplete('#aa-search-input',
 </div>
 </div>
 
-<p>再来一次之前的调用(<strong><em>注意</em></strong>：当接受者是指针时，即使用值类型调用那么函数内部也是对指针的操作，参见：<a href="http://play.golang.org/p/SYBb4xPfPh">http://play.golang.org/p/SYBb4xPfPh</a>)：</p>
+<p>再来一次之前的调用(<strong><em>注意</em></strong>：当接受者是指针时，即使用值类型调用那么函数内部也是对指针的操作，参见：<a href="http://play.golang.org/p/SYBb4xPfPh" target="_blank">http://play.golang.org/p/SYBb4xPfPh</a>)：</p>
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -380,11 +386,11 @@ autocomplete('#aa-search-input',
 </div>
 </div>
 
-<p>如果你不清楚到底什么时候该使用值，什么时候该使用指针作为接受者，你可以去看一下<a href="https://ariesdevil.com/post/choose-whether-to-use-a-value-or-pointer-receiver-on-methods/">这篇介绍</a>。这篇文章同时还包含了社区约定的接受者该如何命名。</p>
+<p>如果你不清楚到底什么时候该使用值，什么时候该使用指针作为接受者，你可以去看一下<a href="https://ariesdevil.com/post/choose-whether-to-use-a-value-or-pointer-receiver-on-methods/" target="_blank">这篇介绍</a>。这篇文章同时还包含了社区约定的接受者该如何命名。</p>
 
 <h2 id="接口">接口</h2>
 
-<p>Go 语言中的<a href="http://golang.org/doc/effective_go.html#interfaces">接口</a>很特别，而且提供了难以置信的一系列灵活性和抽象性。它们指定一个特定类型的值和指针表现为特定的方式。从语言角度看，接口是一种类型，它指定一个<a href="http://golang.org/ref/spec#Method_sets">方法集</a>，所有方法为<a href="http://golang.org/ref/spec#Interface_types">接口类型</a>就被认为是该接口。</p>
+<p>Go 语言中的<a href="http://golang.org/doc/effective_go.html#interfaces" target="_blank">接口</a>很特别，而且提供了难以置信的一系列灵活性和抽象性。它们指定一个特定类型的值和指针表现为特定的方式。从语言角度看，接口是一种类型，它指定一个<a href="http://golang.org/ref/spec#Method_sets" target="_blank">方法集</a>，所有方法为<a href="http://golang.org/ref/spec#Interface_types" target="_blank">接口类型</a>就被认为是该接口。</p>
 
 <p>下面定义一个接口：</p>
 
@@ -398,7 +404,7 @@ autocomplete('#aa-search-input',
 </div>
 </div>
 
-<p>我们定义了一个叫做 <code>Notifier</code> 的接口并包含一个 <code>Notify</code> 方法。当一个接口只包含一个方法时，按照 Go 语言的<a href="http://golang.org/doc/effective_go.html#interface-names">约定</a>命名该接口时添加 <code>-er</code> 后缀。这个约定很有用，特别是接口和方法具有相同名字和意义的时候。</p>
+<p>我们定义了一个叫做 <code>Notifier</code> 的接口并包含一个 <code>Notify</code> 方法。当一个接口只包含一个方法时，按照 Go 语言的<a href="http://golang.org/doc/effective_go.html#interface-names" target="_blank">约定</a>命名该接口时添加 <code>-er</code> 后缀。这个约定很有用，特别是接口和方法具有相同名字和意义的时候。</p>
 
 <p>我们可以在接口中定义尽可能多的方法，不过在 Go 语言标准库中，你很难找到一个接口包含两个以上的方法。</p>
 
@@ -448,18 +454,20 @@ autocomplete('#aa-search-input',
 </div>
 </div>
 
-<p>详细代码：<a href="http://play.golang.org/p/KG8-Qb7gqM">http://play.golang.org/p/KG8-Qb7gqM</a></p>
+<p>详细代码：<a href="http://play.golang.org/p/KG8-Qb7gqM" target="_blank">http://play.golang.org/p/KG8-Qb7gqM</a></p>
 
-<p>为什么编译器不考虑我们的值是实现该接口的类型？接口的调用规则是建立在这些方法的接受者和接口如何被调用的基础上。下面的是语言规范里定义的规则，这些规则用来说明是否我们一个类型的值或者指针<a href="http://golang.org/ref/spec#Method_sets">实现了</a>该接口：</p>
+<p>为什么编译器不考虑我们的值是实现该接口的类型？接口的调用规则是建立在这些方法的接受者和接口如何被调用的基础上。下面的是语言规范里定义的规则，这些规则用来说明是否我们一个类型的值或者指针<a href="http://golang.org/ref/spec#Method_sets" target="_blank">实现了</a>该接口：</p>
 
 <ul>
-<li>类型 <code>*T</code> 的可调用方法集包含接受者为 <code>*T</code> 或 <code>T</code> 的所有方法集</li>
+<li>类型 <code>*T</code> 的可调用方法集包含接受者为 <code>*T</code> 或 <code>T</code> 的所有方法集<br />
+<br /></li>
 </ul>
 
 <p>这条规则说的是如果我们用来调用特定接口方法的接口变量是一个指针类型，那么方法的接受者可以是值类型也可以是指针类型。显然我们的例子不符合该规则，因为我们传入 <code>SendNotification</code> 函数的接口变量是一个值类型。</p>
 
 <ul>
-<li>类型 <code>T</code> 的可调用方法集包含接受者为 <code>T</code> 的所有方法</li>
+<li>类型 <code>T</code> 的可调用方法集包含接受者为 <code>T</code> 的所有方法<br />
+<br /></li>
 </ul>
 
 <p>这条规则说的是如果我们用来调用特定接口方法的接口变量是一个值类型，那么方法的接受者必须也是值类型该方法才可以被调用。显然我们的例子也不符合这条规则，因为我们 <code>Notify</code> 方法的接受者是一个指针类型。</p>
@@ -467,7 +475,8 @@ autocomplete('#aa-search-input',
 <p>语言规范里只有这两条规则，我通过这两条规则得出了符合我们例子的规则：</p>
 
 <ul>
-<li>类型 <code>T</code> 的可调用方法集不包含接受者为 <code>*T</code> 的方法</li>
+<li>类型 <code>T</code> 的可调用方法集不包含接受者为 <code>*T</code> 的方法<br />
+<br /></li>
 </ul>
 
 <p>我们碰巧赶上了我推断出的这条规则，所以编译器会报错。<code>Notify</code> 方法使用指针类型作为接受者而我们却通过值类型来调用该方法。解决办法也很简单，我们只需要传入 <code>User</code> 值的地址到 <code>SendNotification</code> 函数就好了：</p>
@@ -490,11 +499,11 @@ autocomplete('#aa-search-input',
 </div>
 </div>
 
-<p>详细代码：<a href="http://play.golang.org/p/kEKzyTfLjA">http://play.golang.org/p/kEKzyTfLjA</a></p>
+<p>详细代码：<a href="http://play.golang.org/p/kEKzyTfLjA" target="_blank">http://play.golang.org/p/kEKzyTfLjA</a></p>
 
 <h2 id="嵌入类型">嵌入类型</h2>
 
-<p><a href="http://golang.org/ref/spec#Struct_types">结构体类型</a>可以包含匿名或者嵌入字段。也叫做嵌入一个类型。当我们嵌入一个类型到结构体中时，该类型的名字充当了嵌入字段的字段名。</p>
+<p><a href="http://golang.org/ref/spec#Struct_types" target="_blank">结构体类型</a>可以包含匿名或者嵌入字段。也叫做嵌入一个类型。当我们嵌入一个类型到结构体中时，该类型的名字充当了嵌入字段的字段名。</p>
 
 <p>下面定义一个新的类型然后把我们的 <code>User</code> 类型嵌入进去：</p>
 
@@ -534,14 +543,14 @@ autocomplete('#aa-search-input',
 </div>
 </div>
 
-<p>详细代码：<a href="http://play.golang.org/p/ivzzzk78TC">http://play.golang.org/p/ivzzzk78TC</a></p>
+<p>详细代码：<a href="http://play.golang.org/p/ivzzzk78TC" target="_blank">http://play.golang.org/p/ivzzzk78TC</a></p>
 
 <p>事实证明，我们可以 <code>Admin</code> 类型的一个指针来调用 <code>SendNotification</code> 函数。现在 <code>Admin</code> 类型也通过来自嵌入的 <code>User</code> 类型的<strong><em>方法提升</em></strong>实现了该接口。</p>
 
 <p>如果 <code>Admin</code> 类型包含了 <code>User</code> 类型的字段和方法，那么它们在结构体中的关系是怎么样的呢？</p>
 
 <blockquote>
-<p>当我们<a href="http://golang.org/doc/effective_go.html#embedding">嵌入</a>一个类型，这个类型的方法就变成了外部类型的方法，但是当它被调用时，方法的接受者是内部类型(嵌入类型)，而非外部类型。&ndash; Effective Go</p>
+<p>当我们<a href="http://golang.org/doc/effective_go.html#embedding" target="_blank">嵌入</a>一个类型，这个类型的方法就变成了外部类型的方法，但是当它被调用时，方法的接受者是内部类型(嵌入类型)，而非外部类型。&ndash; Effective Go</p>
 </blockquote>
 
 <p>因此嵌入类型的名字充当着字段名，同时嵌入类型作为内部类型存在，我们可以使用下面的调用方法：</p>
@@ -557,7 +566,7 @@ autocomplete('#aa-search-input',
 </div>
 </div>
 
-<p>详细代码：<a href="http://play.golang.org/p/0WL_5Q6mao">http://play.golang.org/p/0WL_5Q6mao</a></p>
+<p>详细代码：<a href="http://play.golang.org/p/0WL_5Q6mao" target="_blank">http://play.golang.org/p/0WL_5Q6mao</a></p>
 
 <p>这儿我们通过类型名称来访问内部类型的字段和方法。然而，这些字段和方法也同样被提升到了外部类型：</p>
 
@@ -572,28 +581,31 @@ autocomplete('#aa-search-input',
 </div>
 </div>
 
-<p>详细代码：<a href="http://play.golang.org/p/2snaaJojRo">http://play.golang.org/p/2snaaJojRo</a></p>
+<p>详细代码：<a href="http://play.golang.org/p/2snaaJojRo" target="_blank">http://play.golang.org/p/2snaaJojRo</a></p>
 
 <p>所以通过外部类型来调用 <code>Notify</code> 方法，本质上是内部类型的方法。</p>
 
-<p>下面是 Go 语言中内部类型<a href="http://golang.org/ref/spec#Method_sets">方法集提升</a>的规则：</p>
+<p>下面是 Go 语言中内部类型<a href="http://golang.org/ref/spec#Method_sets" target="_blank">方法集提升</a>的规则：</p>
 
 <p>给定一个结构体类型 <code>S</code> 和一个命名为 <code>T</code> 的类型，方法提升像下面规定的这样被包含在结构体方法集中：</p>
 
 <ul>
-<li>如果 <code>S</code> 包含一个匿名字段 <code>T</code>，<code>S</code> 和 <code>*S</code> 的方法集都包含接受者为 <code>T</code> 的方法提升。</li>
+<li>如果 <code>S</code> 包含一个匿名字段 <code>T</code>，<code>S</code> 和 <code>*S</code> 的方法集都包含接受者为 <code>T</code> 的方法提升。<br />
+<br /></li>
 </ul>
 
 <p>这条规则说的是当我们嵌入一个类型，嵌入类型的接受者为值类型的方法将被提升，可以被外部类型的值和指针调用。</p>
 
 <ul>
-<li>对于 <code>*S</code> 类型的方法集包含接受者为 <code>*T</code> 的方法提升</li>
+<li>对于 <code>*S</code> 类型的方法集包含接受者为 <code>*T</code> 的方法提升<br />
+<br /></li>
 </ul>
 
 <p>这条规则说的是当我们嵌入一个类型，可以被外部类型的指针调用的方法集只有嵌入类型的接受者为指针类型的方法集，也就是说，当外部类型使用指针调用内部类型的方法时，只有接受者为指针类型的内部类型方法集将被提升。</p>
 
 <ul>
-<li>如果 <code>S</code> 包含一个匿名字段 <code>*T</code>，<code>S</code> 和 <code>*S</code> 的方法集都包含接受者为 <code>T</code> 或者 <code>*T</code> 的方法提升</li>
+<li>如果 <code>S</code> 包含一个匿名字段 <code>*T</code>，<code>S</code> 和 <code>*S</code> 的方法集都包含接受者为 <code>T</code> 或者 <code>*T</code> 的方法提升<br />
+<br /></li>
 </ul>
 
 <p>这条规则说的是当我们嵌入一个类型的指针，嵌入类型的接受者为值类型或指针类型的方法将被提升，可以被外部类型的值或者指针调用。</p>
@@ -643,7 +655,7 @@ autocomplete('#aa-search-input',
 </div>
 </div>
 
-<p>详细代码：<a href="http://play.golang.org/p/JGhFaJnGpS">http://play.golang.org/p/JGhFaJnGpS</a></p>
+<p>详细代码：<a href="http://play.golang.org/p/JGhFaJnGpS" target="_blank">http://play.golang.org/p/JGhFaJnGpS</a></p>
 
 <p>预料之中，<code>Admin</code> 类型的接口实现被 <code>SendNotification</code> 函数调用。现在我们用外部类型来调用 <code>Notify</code> 方法会发生什么呢：</p>
 
@@ -658,20 +670,22 @@ autocomplete('#aa-search-input',
 </div>
 </div>
 
-<p>详细代码：<a href="http://play.golang.org/p/EGqK6DwBOi">http://play.golang.org/p/EGqK6DwBOi</a></p>
+<p>详细代码：<a href="http://play.golang.org/p/EGqK6DwBOi" target="_blank">http://play.golang.org/p/EGqK6DwBOi</a></p>
 
 <p>我们得到了 <code>Admin</code> 类型的接口实现的输出。<code>User</code> 类型的接口实现不被提升到外部类型了。</p>
 
 <p>现在我们有了足够的依据来回答问题了：</p>
 
 <ul>
-<li>编译器会因为我们同时有两个接口实现而报错吗？</li>
+<li>编译器会因为我们同时有两个接口实现而报错吗？<br />
+<br /></li>
 </ul>
 
 <p>不会，因为当我们使用嵌入类型时，类型名充当了字段名。嵌入类型作为结构体的内部类型包含了自己的字段和方法，且具有唯一的名字。所以我们可以有同一接口的内部实现和外部实现。</p>
 
 <ul>
-<li>如果编译器接受这样的定义，那么当接口调用时编译器要怎么确定该使用哪个实现？</li>
+<li>如果编译器接受这样的定义，那么当接口调用时编译器要怎么确定该使用哪个实现？<br />
+<br /></li>
 </ul>
 
 <p>如果外部类型包含了符合要求的接口实现，它将会被使用。否则，通过方法提升，任何内部类型的接口实现可以直接被外部类型使用。</p>
@@ -727,21 +741,47 @@ autocomplete('#aa-search-input',
       <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
         <ul class="list-inline text-center footer-links">
           
+              <li>
+                <a href="mailto:yijun.zhao@outlook.com" title="Email me" target="_blank">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/ariesdevil" title="GitHub" target="_blank">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://twitter.com/ariesdevil77" title="Twitter" target="_blank">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://linkedin.com/in/ariesdevil" title="LinkedIn" target="_blank">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
           
         </ul>
         <p class="credits copyright text-muted">
-          
-
-          &nbsp;&bull;&nbsp;
-          2017
-
-          
-            &nbsp;&bull;&nbsp;
-            <a href="https://ariesdevil.com/">AriesDevil</a>
-          
+          <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank"><img alt="知识共享许可协议" style="border-width:0" src="https://ariesdevil.com/img/cc.png" /></a>
         </p>
         
         <p class="credits theme-by text-muted">
+          All rights reserved - 2017&nbsp;&bull;&nbsp;
+          <a href="https://ariesdevil.com/">AriesDevil</a>&nbsp;&bull;&nbsp;
           由 <a href="http://gohugo.io">Hugo</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
           
         </p>

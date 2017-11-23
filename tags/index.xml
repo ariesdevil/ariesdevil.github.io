@@ -6,6 +6,8 @@
     <description>Recent content in Tags on 髣髴兮若輕雲之蔽月</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
+    <managingEditor>yijun.zhao@outlook.com (AriesDevil)</managingEditor>
+    <webMaster>yijun.zhao@outlook.com (AriesDevil)</webMaster>
     <copyright>All rights reserved - 2017</copyright>
     <lastBuildDate>Wed, 23 Nov 2016 14:06:35 +0800</lastBuildDate>
     
@@ -16,7 +18,7 @@
       <title>Golang</title>
       <link>https://ariesdevil.com/tags/golang/</link>
       <pubDate>Wed, 23 Nov 2016 14:06:35 +0800</pubDate>
-      
+      <author>yijun.zhao@outlook.com (AriesDevil)</author>
       <guid>https://ariesdevil.com/tags/golang/</guid>
       <description></description>
     </item>
@@ -25,7 +27,7 @@
       <title>Memory Management</title>
       <link>https://ariesdevil.com/tags/memory-management/</link>
       <pubDate>Wed, 28 Jan 2015 15:56:22 +0800</pubDate>
-      
+      <author>yijun.zhao@outlook.com (AriesDevil)</author>
       <guid>https://ariesdevil.com/tags/memory-management/</guid>
       <description></description>
     </item>
@@ -34,7 +36,7 @@
       <title>Rust</title>
       <link>https://ariesdevil.com/tags/rust/</link>
       <pubDate>Wed, 28 Jan 2015 15:56:22 +0800</pubDate>
-      
+      <author>yijun.zhao@outlook.com (AriesDevil)</author>
       <guid>https://ariesdevil.com/tags/rust/</guid>
       <description></description>
     </item>

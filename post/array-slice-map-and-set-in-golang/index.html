@@ -32,8 +32,10 @@
 
 数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。
 ">
-  <meta name="author" content=""/>
+  <meta name="author" content="AriesDevil"/>
   <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@ariesdevil77" />
+  <meta name="twitter:creator" content="@ariesdevil77" />
   <meta property="og:url" content="https://ariesdevil.com/post/array-slice-map-and-set-in-golang/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="髣髴兮若輕雲之蔽月" />
@@ -324,7 +326,7 @@ autocomplete('#aa-search-input',
 
 <p>在 Go 语言中数组是固定长度的数据类型，它包含相同类型的连续的元素，这些元素可以是内建类型，像数字和字符串，也可以是结构类型，元素可以通过唯一的索引值访问，从 0 开始。</p>
 
-<p>数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。
+<p>数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。<br />
 </p>
 
 <h3 id="数组声明和初始化">数组声明和初始化</h3>
@@ -564,9 +566,10 @@ autocomplete('#aa-search-input',
 <p>slice 是对底层数组的抽象和控制。它包含 Go 需要对底层数组管理的三种元数据，分别是：</p>
 
 <ol>
-<li>指向底层数组的指针</li>
-<li>slice 中元素的长度</li>
-<li>slice 的容量(可供增长的最大值)</li>
+<li>指向底层数组的指针<br /></li>
+<li>slice 中元素的长度<br /></li>
+<li>slice 的容量(可供增长的最大值)<br />
+<br /></li>
 </ol>
 
 <h3 id="创建和初始化">创建和初始化</h3>
@@ -993,7 +996,7 @@ autocomplete('#aa-search-input',
 
 <p>map 是一种集合，所以我们可以像迭代数组和 slice 那样迭代它。不过，map 是无序的，我们无法决定它的返回顺序，这是因为 map 是使用 hash 表来实现的。</p>
 
-<p>map 的 hash 表包含了一个桶集合(collection of buckets)。当我们存储，移除或者查找键值对(key/value pair)时，都会从选择一个桶开始。在映射(map)操作过程中，我们会把指定的键值(key)传递给 hash 函数(又称散列函数)。hash 函数的作用是生成索引，索引均匀的分布在所有可用的桶上。hash 表算法可以参见这两篇博客：<a href="http://blog.csdn.net/v_JULY_v/article/details/6256463">July的博客&ndash;从头到尾彻底解析 hash 表算法</a>，<a href="https://drmingdrmer.github.io/math/hash/2017/08/05/numbers-programmers-should-know-about-hash-zh.html">摸清hash表的脾性</a></p>
+<p>map 的 hash 表包含了一个桶集合(collection of buckets)。当我们存储，移除或者查找键值对(key/value pair)时，都会从选择一个桶开始。在映射(map)操作过程中，我们会把指定的键值(key)传递给 hash 函数(又称散列函数)。hash 函数的作用是生成索引，索引均匀的分布在所有可用的桶上。hash 表算法可以参见这两篇博客：<a href="http://blog.csdn.net/v_JULY_v/article/details/6256463" target="_blank">July的博客&ndash;从头到尾彻底解析 hash 表算法</a>，<a href="https://drmingdrmer.github.io/math/hash/2017/08/05/numbers-programmers-should-know-about-hash-zh.html" target="_blank">摸清hash表的脾性</a></p>
 
 <h3 id="创建和初始化-1">创建和初始化</h3>
 
@@ -1011,7 +1014,7 @@ autocomplete('#aa-search-input',
 </div>
 </div>
 
-<p>使用字面值是创建 map 惯用的方法(<a href="http://peter.bourgon.org/go-in-production/#formatting-and-style">为什么不使用make</a>)。初始化 map 的长度依赖于键值对的数量。</p>
+<p>使用字面值是创建 map 惯用的方法(<a href="http://peter.bourgon.org/go-in-production/#formatting-and-style" target="_blank">为什么不使用make</a>)。初始化 map 的长度依赖于键值对的数量。</p>
 
 <p>map 的键可以是任意内建类型或者是 struct 类型，map 的值可以是使用 <code>==</code>操作符的表达式。slice，function 和 包含 slice 的 struct 类型不可以作为 map 的键，否则会编译错误：</p>
 
@@ -1273,15 +1276,15 @@ autocomplete('#aa-search-input',
 <h2 id="总结">总结</h2>
 
 <ul>
-<li>数组是 slice 和 map 的底层结构。</li>
-<li>slice 是 Go 里面惯用的集合数据的方法，map 则是用来存储键值对。</li>
-<li>内建函数 <code>make</code> 用来创建 slice 和 map，并且为它们指定长度和容量等等。slice 和 map 字面值也可以做同样的事。</li>
-<li>slice 有容量的约束，不过可以通过内建函数 <code>append</code> 来增加元素。</li>
-<li>map 没有容量一说，所以也没有任何增长限制。</li>
-<li>内建函数 <code>len</code> 可以用来获得 slice 和 map 的长度。</li>
-<li>内建函数 <code>cap</code> 只能作用在 slice 上。</li>
-<li>可以通过组合方式来创建多维数组和 slice。map 的值可以是 slice 或者另一个 map。slice 不能作为 map 的键。</li>
-<li>在函数之间传递 slice 和 map 是相当廉价的，因为他们不会传递底层数组的拷贝。</li>
+<li>数组是 slice 和 map 的底层结构。<br /></li>
+<li>slice 是 Go 里面惯用的集合数据的方法，map 则是用来存储键值对。<br /></li>
+<li>内建函数 <code>make</code> 用来创建 slice 和 map，并且为它们指定长度和容量等等。slice 和 map 字面值也可以做同样的事。<br /></li>
+<li>slice 有容量的约束，不过可以通过内建函数 <code>append</code> 来增加元素。<br /></li>
+<li>map 没有容量一说，所以也没有任何增长限制。<br /></li>
+<li>内建函数 <code>len</code> 可以用来获得 slice 和 map 的长度。<br /></li>
+<li>内建函数 <code>cap</code> 只能作用在 slice 上。<br /></li>
+<li>可以通过组合方式来创建多维数组和 slice。map 的值可以是 slice 或者另一个 map。slice 不能作为 map 的键。<br /></li>
+<li>在函数之间传递 slice 和 map 是相当廉价的，因为他们不会传递底层数组的拷贝。<br /></li>
 </ul>
       </article>
 
@@ -1335,21 +1338,47 @@ autocomplete('#aa-search-input',
       <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
         <ul class="list-inline text-center footer-links">
           
+              <li>
+                <a href="mailto:yijun.zhao@outlook.com" title="Email me" target="_blank">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/ariesdevil" title="GitHub" target="_blank">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://twitter.com/ariesdevil77" title="Twitter" target="_blank">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://linkedin.com/in/ariesdevil" title="LinkedIn" target="_blank">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
           
         </ul>
         <p class="credits copyright text-muted">
-          
-
-          &nbsp;&bull;&nbsp;
-          2017
-
-          
-            &nbsp;&bull;&nbsp;
-            <a href="https://ariesdevil.com/">AriesDevil</a>
-          
+          <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank"><img alt="知识共享许可协议" style="border-width:0" src="https://ariesdevil.com/img/cc.png" /></a>
         </p>
         
         <p class="credits theme-by text-muted">
+          All rights reserved - 2017&nbsp;&bull;&nbsp;
+          <a href="https://ariesdevil.com/">AriesDevil</a>&nbsp;&bull;&nbsp;
           由 <a href="http://gohugo.io">Hugo</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
           
         </p>

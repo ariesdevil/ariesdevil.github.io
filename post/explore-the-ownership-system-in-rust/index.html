@@ -29,8 +29,10 @@
 我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 let，fn，struct，trait 和 impl 概念。
 
 我们的目标是学习如果写 rust 代码， …">
-  <meta name="author" content=""/>
+  <meta name="author" content="AriesDevil"/>
   <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@ariesdevil77" />
+  <meta name="twitter:creator" content="@ariesdevil77" />
   <meta property="og:url" content="https://ariesdevil.com/post/explore-the-ownership-system-in-rust/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="髣髴兮若輕雲之蔽月" />
@@ -314,21 +316,22 @@ autocomplete('#aa-search-input',
 
 <p>这两个部分的介绍是为了给那些了解 rust 基本语法，写过一些小的 demo 代码，但却不是很清楚 <code>ownership</code> 和 <code>borrowing</code> 机制的码农看的。</p>
 
-<p>我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 <code>let</code>，<code>fn</code>，<code>struct</code>，<code>trait</code> 和 <code>impl</code> 概念。
-
+<p>我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 <code>let</code>，<code>fn</code>，<code>struct</code>，<code>trait</code> 和 <code>impl</code> 概念。<br />
+<br />
 我们的目标是学习如果写 rust 代码，而且在写的过程中不要碰到有关 <code>ownership</code> 和 <code>borrowing</code> 的墙。</p>
 
 <p>首先是 <em>ownership</em> 部分：</p>
 
 <ul>
-<li>在简单介绍之后</li>
-<li>学习 <code>Copy Traits</code>，然后</li>
-<li>学习 不可变(<code>Immutable</code>)</li>
-<li>和 可变(<code>Mutable</code>) 所有权规则</li>
-<li>然后介绍一下所有权系统的强大之处</li>
-<li>体现在内存管理方面</li>
-<li>垃圾回收方面</li>
-<li>以及并发方面</li>
+<li>在简单介绍之后<br /></li>
+<li>学习 <code>Copy Traits</code>，然后<br /></li>
+<li>学习 不可变(<code>Immutable</code>)<br /></li>
+<li>和 可变(<code>Mutable</code>) 所有权规则<br /></li>
+<li>然后介绍一下所有权系统的强大之处<br /></li>
+<li>体现在内存管理方面<br /></li>
+<li>垃圾回收方面<br /></li>
+<li>以及并发方面<br />
+<br /></li>
 </ul>
 
 <h2 id="先决条件-你应该预先知道的">先决条件 &ndash; 你应该预先知道的</h2>
@@ -370,14 +373,14 @@ autocomplete('#aa-search-input',
 
 <p>在 Rust 中，就像在 C艹 中(或者其他的语言)，可以使用你的自定义类型来替代 Int。值将会被分配在当前栈，然后在离开作用域的时候被释放。</p>
 
-<p>然而，Rust 编译器使用了不同的所有权规则，除非类型实现了 <code>Copy</code> 特质。
+<p>然而，Rust 编译器使用了不同的所有权规则，除非类型实现了 <code>Copy</code> 特质。<br />
 因此，我们先来讨论一下 <code>Copy</code> 特质，看看它是如何工作的。</p>
 
 <h2 id="copy-trait">Copy Trait</h2>
 
 <p><code>Copy</code> 特质使类型的行为有了同样的方式：它每次赋值或者用作函数参数的时候，内存空间地址会被完整拷贝到另一个内存地址。实现这个特质允许你像使用内建 integer 一样使用你自定义类型。</p>
 
-<p>内建的类型 <code>i64</code>(一种类型的 integer) 实现了这个特质，还有<a href="http://doc.rust-lang.org/std/marker/trait.Copy.html">很多类型</a>都实现了它。</p>
+<p>内建的类型 <code>i64</code>(一种类型的 integer) 实现了这个特质，还有<a href="http://doc.rust-lang.org/std/marker/trait.Copy.html" target="_blank">很多类型</a>都实现了它。</p>
 
 <p>如果我们有一个 <code>Info</code> 结构体，我们可以通过实现 <code>Copy</code> 特质来让它可拷贝。</p>
 
@@ -562,7 +565,7 @@ del bob &quot;A&quot;
 end is near
 </code></pre>
 
-<p><a href="http://dwz.cn/APyM7">自己试一下</a></p>
+<p><a href="http://dwz.cn/APyM7" target="_blank">自己试一下</a></p>
 
 <p>bob 在 black_hole 函数里挂了，而不是在 <code>main</code> 函数的结尾!</p>
 
@@ -597,8 +600,9 @@ end is near
 <p>如果你知道规则，你也可以简单的做到这些。到目前为止，我们知道了一些规则：</p>
 
 <ul>
-<li><strong>没有使用的返回值会被销毁</strong></li>
-<li><strong>所有被绑定到 <code>let</code> 的值都会在函数结尾处被销毁，除非它被移动了</strong></li>
+<li><strong>没有使用的返回值会被销毁</strong><br /></li>
+<li><strong>所有被绑定到 <code>let</code> 的值都会在函数结尾处被销毁，除非它被移动了</strong><br />
+<br /></li>
 </ul>
 
 <p>现在我们知道了，内存安全实际是基于一个值只能有一个所有者。</p>
@@ -704,9 +708,10 @@ del bob &quot;C&quot;
 <p>相对于不可变性，可变性只有一条附加规则：</p>
 
 <ul>
-<li>没有使用的返回值会被销毁</li>
-<li>所有被绑定到 <code>let</code> 的值都会在函数结尾处被销毁，除非它被移动了</li>
-<li><strong>被替换的值将被销毁</strong></li>
+<li>没有使用的返回值会被销毁<br /></li>
+<li>所有被绑定到 <code>let</code> 的值都会在函数结尾处被销毁，除非它被移动了<br /></li>
+<li><strong>被替换的值将被销毁</strong><br />
+<br /></li>
 </ul>
 
 <p>很明显了，在 Rust 中，我们可以确定一个值没有所有者或者被引用。</p>
@@ -783,7 +788,7 @@ Rc(bob A)
 del bob A
 </code></pre>
 
-<p><a href="http://dwz.cn/APyxG">自己试一下</a></p>
+<p><a href="http://dwz.cn/APyxG" target="_blank">自己试一下</a></p>
 
 <p>我们可以改变 <code>black_hole</code> 函数来接受一个 <code>Rc&lt;Bob&gt;</code> 然后检查是否被销毁。但是我们可以更简单的让它接受<strong>任意类型</strong>的 <code>T</code> 然后实现 <code>Show</code> 特质来方便打印。让我们来让它泛型话：</p>
 
@@ -819,7 +824,7 @@ Rc(bob A)
 del bob A
 </code></pre>
 
-<p><a href="http://dwz.cn/APxTk">自己试一下</a></p>
+<p><a href="http://dwz.cn/APxTk" target="_blank">自己试一下</a></p>
 
 <p>它在 black_hole 里存活了下来！不过它是怎么工作的？</p>
 
@@ -852,7 +857,7 @@ del bob mutant
 
 <p>这个例子证明了不同的低级别工具是如何以最小的代价来组合实现精确的垃圾回收。</p>
 
-<p>举个栗子，<code>Rc</code> 只能被使用在同一线程中。不过另外一个类型 <code>Arc</code> 可以被不同线程使用。一个可变的 <code>Rc</code> 可能会被多个对象互相引用。不过，<code>Rc</code> 可以被克隆成弱引用(<code>Weak</code>) ，这样就不会参与引用计数了。更多的信息请查看<a href="http://doc.rust-lang.org/std/rc/">官方文档</a>。</p>
+<p>举个栗子，<code>Rc</code> 只能被使用在同一线程中。不过另外一个类型 <code>Arc</code> 可以被不同线程使用。一个可变的 <code>Rc</code> 可能会被多个对象互相引用。不过，<code>Rc</code> 可以被克隆成弱引用(<code>Weak</code>) ，这样就不会参与引用计数了。更多的信息请查看<a href="http://doc.rust-lang.org/std/rc/" target="_blank">官方文档</a>。</p>
 
 <p>最重要的是，更多高级的垃圾回收机制可以(即将)被实现，而且都是使用库的形式。</p>
 
@@ -885,7 +890,7 @@ From thread, bob A and 12i64
 del bob A
 </code></pre>
 
-<p><a href="http://dwz.cn/APyoQ">自己试一下</a></p>
+<p><a href="http://dwz.cn/APyoQ" target="_blank">自己试一下</a></p>
 
 <p>发生了什么？首先，我们创建了两个值：<code>bob</code> 和 <code>i</code>。然后我们通过 <code>Thread::scoped</code> 创建了一个新的线程并且传入一个闭包让它执行。闭包捕获了我们的两个值。</p>
 
@@ -895,7 +900,7 @@ del bob A
 
 <p>你可能会指出这跟你之前使用线程没啥区别 &ndash; 我们大家都知道如果没有某些同步机制是不可以随便在不同线程之间共享内存地址的。Rust 的不同之处在于它在编译期就强制了这一点。</p>
 
-<p>当然，我们能获取到 <code>guard</code> 的返回值，也可以创建一个管道在不同线程中来发送和接受值。更多的信息请查看官方<a href="http://doc.rust-lang.org/std/thread/">线程文档</a>，<a href="http://doc.rust-lang.org/std/sync/mpsc/">管道文档</a>，和<a href="http://doc.rust-lang.org/book/threads.html">这本书</a>。</p>
+<p>当然，我们能获取到 <code>guard</code> 的返回值，也可以创建一个管道在不同线程中来发送和接受值。更多的信息请查看官方<a href="http://doc.rust-lang.org/std/thread/" target="_blank">线程文档</a>，<a href="http://doc.rust-lang.org/std/sync/mpsc/" target="_blank">管道文档</a>，和<a href="http://doc.rust-lang.org/book/threads.html" target="_blank">这本书</a>。</p>
 
 <h2 id="还有啥">还有啥？</h2>
 
@@ -905,7 +910,7 @@ del bob A
 
 <p>在这个系列的第二部分中我们将学习为什么借用机制很有用，已经怎么最好的使用它。</p>
 
-<p>原文地址：<a href="http://nercury.github.io/rust/guide/2015/01/19/ownership.html">http://nercury.github.io/rust/guide/2015/01/19/ownership.html</a></p>
+<p>原文地址：<a href="http://nercury.github.io/rust/guide/2015/01/19/ownership.html" target="_blank">http://nercury.github.io/rust/guide/2015/01/19/ownership.html</a></p>
       </article>
 
       <ul class="pager blog-pager">
@@ -958,21 +963,47 @@ del bob A
       <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
         <ul class="list-inline text-center footer-links">
           
+              <li>
+                <a href="mailto:yijun.zhao@outlook.com" title="Email me" target="_blank">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/ariesdevil" title="GitHub" target="_blank">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://twitter.com/ariesdevil77" title="Twitter" target="_blank">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://linkedin.com/in/ariesdevil" title="LinkedIn" target="_blank">
+                  <span class="fa-stack fa-lg">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
           
         </ul>
         <p class="credits copyright text-muted">
-          
-
-          &nbsp;&bull;&nbsp;
-          2017
-
-          
-            &nbsp;&bull;&nbsp;
-            <a href="https://ariesdevil.com/">AriesDevil</a>
-          
+          <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank"><img alt="知识共享许可协议" style="border-width:0" src="https://ariesdevil.com/img/cc.png" /></a>
         </p>
         
         <p class="credits theme-by text-muted">
+          All rights reserved - 2017&nbsp;&bull;&nbsp;
+          <a href="https://ariesdevil.com/">AriesDevil</a>&nbsp;&bull;&nbsp;
           由 <a href="http://gohugo.io">Hugo</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
           
         </p>
