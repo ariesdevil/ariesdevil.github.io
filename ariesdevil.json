@@ -3,7 +3,8 @@
         "title": "About",
         "uri": "about",
         "date": "2017-11-20T12:49:53.000Z",
-        "draft": false
+        "draft": false,
+        "include_toc": false
     },
     {
         "title": "Go 语言方法接受者类型的选择",
@@ -18,7 +19,6 @@
         ],
         "share": true,
         "isCJKLanguage": true,
-        "comments": true,
         "keywords": [
             "method receiver"
         ]
