@@ -4,7 +4,8 @@
         "uri": "about",
         "date": "2017-11-20T12:49:53.000Z",
         "draft": false,
-        "include_toc": false
+        "include_toc": false,
+        "postmeta": false
     },
     {
         "title": "Go 语言方法接受者类型的选择",
