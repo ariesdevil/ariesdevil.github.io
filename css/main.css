@@ -12,6 +12,7 @@ body {
 }
 .container[role=main] {
   margin-bottom:50px;
+  width: 100%;
   flex: 1 0 auto;
 }
 p {
