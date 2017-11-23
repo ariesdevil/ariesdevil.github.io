@@ -22,6 +22,21 @@
     </item>
     
     <item>
+      <title>探索 Rust 的所有权机制(Ownership System)</title>
+      <link>https://ariesdevil.com/post/explore-the-ownership-system-in-rust/</link>
+      <pubDate>Wed, 28 Jan 2015 15:56:22 +0800</pubDate>
+      
+      <guid>https://ariesdevil.com/post/explore-the-ownership-system-in-rust/</guid>
+      <description>&lt;h2 id=&#34;主要内容&#34;&gt;主要内容&lt;/h2&gt;
+
+&lt;p&gt;这两个部分的介绍是为了给那些了解 rust 基本语法，写过一些小的 demo 代码，但却不是很清楚 &lt;code&gt;ownership&lt;/code&gt; 和 &lt;code&gt;borrowing&lt;/code&gt; 机制的码农看的。&lt;/p&gt;
+
+&lt;p&gt;我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 &lt;code&gt;let&lt;/code&gt;，&lt;code&gt;fn&lt;/code&gt;，&lt;code&gt;struct&lt;/code&gt;，&lt;code&gt;trait&lt;/code&gt; 和 &lt;code&gt;impl&lt;/code&gt; 概念。
+
+我们的目标是学习如果写 rust 代码，而且在写的过程中不要碰到有关 &lt;code&gt;ownership&lt;/code&gt; 和 &lt;code&gt;borrowing&lt;/code&gt; 的墙。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Go 语言中的 new() 和 make() 的区别</title>
       <link>https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/</link>
       <pubDate>Thu, 22 May 2014 15:56:22 +0800</pubDate>

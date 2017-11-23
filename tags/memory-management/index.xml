@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on 髣髴兮若輕雲之蔽月</title>
-    <link>https://ariesdevil.com/post/</link>
-    <description>Recent content in Posts on 髣髴兮若輕雲之蔽月</description>
+    <title>Memory Management on 髣髴兮若輕雲之蔽月</title>
+    <link>https://ariesdevil.com/tags/memory-management/</link>
+    <description>Recent content in Memory Management on 髣髴兮若輕雲之蔽月</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>All rights reserved - 2017</copyright>
     <lastBuildDate>Wed, 28 Jan 2015 15:56:22 +0800</lastBuildDate>
     
-	<atom:link href="https://ariesdevil.com/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ariesdevil.com/tags/memory-management/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -25,18 +25,6 @@
 &lt;p&gt;我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 &lt;code&gt;let&lt;/code&gt;，&lt;code&gt;fn&lt;/code&gt;，&lt;code&gt;struct&lt;/code&gt;，&lt;code&gt;trait&lt;/code&gt; 和 &lt;code&gt;impl&lt;/code&gt; 概念。
 
 我们的目标是学习如果写 rust 代码，而且在写的过程中不要碰到有关 &lt;code&gt;ownership&lt;/code&gt; 和 &lt;code&gt;borrowing&lt;/code&gt; 的墙。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Go 语言中的 new() 和 make() 的区别</title>
-      <link>https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/</link>
-      <pubDate>Thu, 22 May 2014 15:56:22 +0800</pubDate>
-      
-      <guid>https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/</guid>
-      <description>&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
-
-&lt;p&gt;Go 语言中的 &lt;code&gt;new&lt;/code&gt; 和 &lt;code&gt;make&lt;/code&gt; 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。
-&lt;/p&gt;</description>
     </item>
     
   </channel>

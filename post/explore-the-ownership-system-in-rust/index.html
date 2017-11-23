@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>探索 Rust 的所有权机制(Ownership System)</title>
+  <meta property="og:title" content="探索 Rust 的所有权机制(Ownership System)" />
+  <meta name="twitter:title" content="探索 Rust 的所有权机制(Ownership System)" />
+  <meta name="description" content="主要内容
+
+这两个部分的介绍是为了给那些了解 rust 基本语法，写过一些小的 demo 代码，但却不是很清楚 ownership 和 borrowing 机制的码农看的。
+
+我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 let，fn，struct，trait 和 impl 概念。
+
+我们的目标是学习如果写 rust 代码，而且在写的过程中不要碰到有关 ownership 和 borrowing 的墙。">
+  <meta property="og:description" content="主要内容
+
+这两个部分的介绍是为了给那些了解 rust 基本语法，写过一些小的 demo 代码，但却不是很清楚 ownership 和 borrowing 机制的码农看的。
+
+我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 let，fn，struct，trait 和 impl 概念。
+
+我们的目标是学习如果写 rust 代码，而且在写的过程中不要碰到有关 ownership 和 borrowing 的墙。">
+  <meta name="twitter:description" content="主要内容
+
+这两个部分的介绍是为了给那些了解 rust 基本语法，写过一些小的 demo 代码，但却不是很清楚 ownership 和 borrowing 机制的码农看的。
+
+我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 let，fn，struct，trait 和 impl 概念。
+
+我们的目标是学习如果写 rust 代码， …">
+  <meta name="author" content=""/>
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:url" content="https://ariesdevil.com/post/explore-the-ownership-system-in-rust/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="髣髴兮若輕雲之蔽月" />
+
+  <meta name="generator" content="Hugo 0.32-DEV" />
+  <link rel="canonical" href="https://ariesdevil.com/post/explore-the-ownership-system-in-rust/" />
+  <link rel="alternate" href="" type="application/rss+xml" title="髣髴兮若輕雲之蔽月">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://ariesdevil.com/css/main.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" /><link rel="stylesheet" href="https://ariesdevil.com/css/syntax.css" />
+<meta name="baidu-site-verification" content="zuepAqqZ0W" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css" integrity="sha256-sCl5PUOGMLfFYctzDW3MtRib0ctyUvI9Qsmq2wXOeBY=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css" integrity="sha256-BFeI1V+Vh1Rk37wswuOYn5lsTcaU96hGaI7OUVCLjPc=" crossorigin="anonymous" />
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-47298019-3', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">切换导航</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://ariesdevil.com/">髣髴兮若輕雲之蔽月</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="categories" href="https://ariesdevil.com/categories">categories</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="tags" href="https://ariesdevil.com/tags">tags</a>
+            </li>
+          
+        
+          
+            <li>
+              <a title="About me" href="https://ariesdevil.com/about">About me</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    <div class="avatar-container">
+      <div class="avatar-img-border">
+        
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+
+
+    
+  
+  
+  
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              <h1>探索 Rust 的所有权机制(Ownership System)</h1>
+                
+                
+                  <span class="post-meta">
+  <br> 
+  发表于 January 28, 2015
+  字数 : 4518  阅读时间 : 10 分钟<br>
+  
+  <span class="post-meta">
+    标签 : 
+    
+      #<a href="https://ariesdevil.com/tags/rust/">rust</a>&nbsp;
+    
+      #<a href="https://ariesdevil.com/tags/memory-management/">memory management</a>&nbsp;
+    
+  </span>
+  
+  
+</span>
+
+
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <h2 id="主要内容">主要内容</h2>
+
+<p>这两个部分的介绍是为了给那些了解 rust 基本语法，写过一些小的 demo 代码，但却不是很清楚 <code>ownership</code> 和 <code>borrowing</code> 机制的码农看的。</p>
+
+<p>我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 <code>let</code>，<code>fn</code>，<code>struct</code>，<code>trait</code> 和 <code>impl</code> 概念。
+
+我们的目标是学习如果写 rust 代码，而且在写的过程中不要碰到有关 <code>ownership</code> 和 <code>borrowing</code> 的墙。</p>
+
+<p>首先是 <em>ownership</em> 部分：</p>
+
+<ul>
+<li>在简单介绍之后</li>
+<li>学习 <code>Copy Traits</code>，然后</li>
+<li>学习 不可变(<code>Immutable</code>)</li>
+<li>和 可变(<code>Mutable</code>) 所有权规则</li>
+<li>然后介绍一下所有权系统的强大之处</li>
+<li>体现在内存管理方面</li>
+<li>垃圾回收方面</li>
+<li>以及并发方面</li>
+</ul>
+
+<h2 id="先决条件-你应该预先知道的">先决条件 &ndash; 你应该预先知道的</h2>
+
+<p>基于 作用域/栈 的内存管理很简单，因为我们已经很熟悉它的工作方式了。比如下面的代码，<code>i</code> 在 <code>main</code> 函数的最后发生了什么？</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<p>它离开了作用域然后释放了，对吗？</p>
+
+<p>那如果我们把 <code>i</code> 传给另一个函数 <code>foo</code>，它释放了几次？</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span><span class="lnt">7</span><span class="lnt">8</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">foo</span><span class="p">(</span><span class="n">i</span>: <span class="kt">i64</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="c1">// 干点啥
+</span><span class="c1"></span><span class="p">}</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w">
+</span><span class="w">    </span><span class="n">foo</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w">  </span><span class="c1">// 调用 foo 函数
+</span><span class="c1"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<p>是的，它释放了两次。第一次是在 <code>foo</code> 函数结束时候，第二次是在 <code>main</code> 函数结束之后。如果你修改了 <code>foo</code>，那么<strong>完全不会影响</strong> <code>main</code>。</p>
+
+<p>因为在调用 <code>foo(i)</code> 的时候值被拷贝了。</p>
+
+<p>在 Rust 中，就像在 C艹 中(或者其他的语言)，可以使用你的自定义类型来替代 Int。值将会被分配在当前栈，然后在离开作用域的时候被释放。</p>
+
+<p>然而，Rust 编译器使用了不同的所有权规则，除非类型实现了 <code>Copy</code> 特质。
+因此，我们先来讨论一下 <code>Copy</code> 特质，看看它是如何工作的。</p>
+
+<h2 id="copy-trait">Copy Trait</h2>
+
+<p><code>Copy</code> 特质使类型的行为有了同样的方式：它每次赋值或者用作函数参数的时候，内存空间地址会被完整拷贝到另一个内存地址。实现这个特质允许你像使用内建 integer 一样使用你自定义类型。</p>
+
+<p>内建的类型 <code>i64</code>(一种类型的 integer) 实现了这个特质，还有<a href="http://doc.rust-lang.org/std/marker/trait.Copy.html">很多类型</a>都实现了它。</p>
+
+<p>如果我们有一个 <code>Info</code> 结构体，我们可以通过实现 <code>Copy</code> 特质来让它可拷贝。</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">struct</span> <span class="nc">Info</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="n">value</span>: <span class="kt">i64</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
+</span><span class="w"></span><span class="k">impl</span><span class="w"> </span><span class="nb">Copy</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Info</span><span class="w"> </span><span class="p">{}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<p>或者，使用 <code>#[derive(Copy)]</code> 属性实现同样的功能</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="cp">#[derive(Copy)]</span><span class="w">
+</span><span class="w"></span><span class="k">struct</span> <span class="nc">Info</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="n">value</span>: <span class="kt">i64</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<p>没有实现 <code>Copy</code> 特质的类型将会移动到另一个地址并且服从所有权规则。</p>
+
+<h2 id="所有权-ownership">所有权(Ownership)</h2>
+
+<p>所有权规则规定：对于一个不可被拷贝的值，在任意一个地方，只能有一个所有者可以<strong>改变</strong>它。</p>
+
+<p>因此，如果一个函数有责任删除一个值，它可以确认未来没有其他的所有者会访问，修改或者删除它。</p>
+
+<p>抽象的概念就说这么多，来看看具体的例子！</p>
+
+<h3 id="向-bob-问好-我们的人体模型结构体">向 Bob 问好，我们的人体模型结构体。。。</h3>
+
+<p>为了证明数据是如何移动的，我们创建一个新的结构体，叫做 <code>Bob</code>。</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">struct</span> <span class="nc">Bob</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="n">name</span>: <span class="nb">String</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<p>在 Bob 的构造方法 <code>new</code> 中，我们宣布一下他的创建：</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">impl</span><span class="w"> </span><span class="n">Bob</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="k">fn</span> <span class="nf">new</span><span class="p">(</span><span class="n">name</span>: <span class="kp">&amp;</span><span class="kt">str</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">Bob</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;new bob {:?}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">);</span><span class="w">
+</span><span class="w">        </span><span class="n">Bob</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">name</span>: <span class="nc">name</span><span class="p">.</span><span class="n">to_string</span><span class="p">()</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span><span class="w">    </span><span class="p">}</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<p>当 Bob 被销毁时(对不起啦 Bob)，我们通过实现内建的 <code>Drop::drop</code> 特质来打印一下他的名字：</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">impl</span><span class="w"> </span><span class="nb">Drop</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Bob</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="k">fn</span> <span class="nf">drop</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;del bob {:?}&#34;</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">name</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="p">}</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<p>为了让 bob 的值在打印时候可以格式化，我们试下一下内建的 <code>Show::fmt</code> 特质方法：</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">impl</span><span class="w"> </span><span class="n">fmt</span>::<span class="n">Show</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Bob</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="k">fn</span> <span class="nf">fmt</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">f</span>: <span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="n">fmt</span>::<span class="n">Formatter</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">fmt</span>::<span class="nb">Result</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="n">write</span><span class="o">!</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;bob {:?}&#34;</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">name</span><span class="p">)</span><span class="w">
+</span><span class="w">    </span><span class="p">}</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<h3 id="来测试一下">来测试一下</h3>
+
+<p>当我们在 <code>main</code> 函数中创建 Bob 时，我们得到一个预期的结果：</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="n">Bob</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;A&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<pre><code>new bob &quot;A&quot;
+del bob &quot;A&quot;
+</code></pre>
+
+<p>好的，bob 挂了，但是啥时候挂的？</p>
+
+<p>让我们在函数结尾插入一个 &ldquo;print&rdquo; 语句：</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">main</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="n">Bob</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;A&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">{</span><span class="s">&#34;end is near&#34;</span><span class="p">};</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<pre><code>new bob &quot;A&quot;
+del bob &quot;A&quot;
+end is near
+</code></pre>
+
+<p>他在函数<strong>结束前</strong>就已经挂了。返回值并没有被赋值给任何东西，所以编译器调用了 <code>drop</code> 来在他创建的地方销毁他。</p>
+
+<p>如果我们绑定返回值给一个变量呢？</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">bob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Bob</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;A&#34;</span><span class="p">)</span><span class="w">
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;end is near&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<pre><code>new bob &quot;A&quot;
+end is near
+del bob &quot;A&quot;
+</code></pre>
+
+<p>有了 <code>let</code> 绑定，他在函数结束时才会挂，也就是在离开作用域时。所以，编译器<strong>在作用域结束时销毁绑定值</strong>。</p>
+
+<h3 id="销毁它-除非它移动了">销毁它，除非它移动了</h3>
+
+<p>值可以被<strong>移动</strong>到另一个地方，如果它移动了，它不会被销毁！</p>
+
+<p>那么怎么移动呢？其实也就是简单地把它们<strong>作为值</strong>传给另一个函数。</p>
+
+<p>让我们把我们的 bob 值传给一个叫 <code>black_hole</code> 的函数：</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span><span class="lnt">7</span><span class="lnt">8</span><span class="lnt">9</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">black_hole</span><span class="p">(</span><span class="n">bob</span>: <span class="nc">Bob</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;imminent shrinkage {:?}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">bob</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">bob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Bob</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;A&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="n">black_hole</span><span class="p">(</span><span class="n">bob</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="n">end</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">near</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<pre><code>new bob &quot;A&quot;
+imminent shrikage bob &quot;A&quot;
+del bob &quot;A&quot;
+end is near
+</code></pre>
+
+<p><a href="http://dwz.cn/APyM7">自己试一下</a></p>
+
+<p>bob 在 black_hole 函数里挂了，而不是在 <code>main</code> 函数的结尾!</p>
+
+<p>等一下，如果我们把 Bob 传给 black_hole 两次会发生什么呢？</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">bob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Bob</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;A&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="n">black_hole</span><span class="p">(</span><span class="n">bob</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="n">black_hole</span><span class="p">(</span><span class="n">bob</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<pre><code>&lt;anon&gt;:35:16: 35:19 error: use of moved value: `bob`
+&lt;anon&gt;:35     black_hole(bob);
+                         ^~~
+&lt;anon&gt;:34:16: 34:19 note: `bob` moved here because it has type `Bob`, which is non-copyable
+&lt;anon&gt;:34     black_hole(bob);
+                         ^~~
+</code></pre>
+
+<p>编译器告诉我们不可以使用已经移动的值，而且做了详细的解释。</p>
+
+<h3 id="没有魔法-只是规则而已">没有魔法 &ndash; 只是规则而已</h3>
+
+<p>为了实现 “不用垃圾回收机制的内存安全”，编译器不需要追踪你代码里的值。编译器可以通过观测函数体来确定函数需要销毁哪些值。</p>
+
+<p>如果你知道规则，你也可以简单的做到这些。到目前为止，我们知道了一些规则：</p>
+
+<ul>
+<li><strong>没有使用的返回值会被销毁</strong></li>
+<li><strong>所有被绑定到 <code>let</code> 的值都会在函数结尾处被销毁，除非它被移动了</strong></li>
+</ul>
+
+<p>现在我们知道了，内存安全实际是基于一个值只能有一个所有者。</p>
+
+<p>然而，到目前为止我们只是讨论了<strong>不可变</strong>的 <code>let</code> 绑定 - 当我们的值可变时，规则会变得略微复杂。</p>
+
+<h2 id="所有权-可变性">所有权（可变性）</h2>
+
+<p>所有的值都可以被改变：我们只需要在变量名和 <code>let</code> 之间加入 <code>mut</code>。举个栗子，我们可以改变 bob 的一些地方，比如说名字：</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">bob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Bob</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;A&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="n">bob</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span>::<span class="n">from_str</span><span class="p">(</span><span class="s">&#34;mutant&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<pre><code>new bob &quot;A&quot;
+del bob &quot;mutant&quot;
+</code></pre>
+
+<p>我们以名字 “A” 创建了他，但是以名字 “mutant” 销毁了他。</p>
+
+<p>如果我们把这个值传给另一个函数 <code>mutate</code>，我们同样可以把它赋值给 <code>mut</code> 修饰的变量：</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span><span class="lnt">7</span><span class="lnt">8</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">mutate</span><span class="p">(</span><span class="n">value</span>: <span class="nc">Bob</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">bob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span><span class="w">
+</span><span class="w">    </span><span class="n">bob</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span>::<span class="n">from_str</span><span class="p">(</span><span class="s">&#34;mutant&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="n">mutate</span><span class="p">(</span><span class="n">Bob</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;A&#34;</span><span class="p">));</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<pre><code>new bob &quot;A&quot;
+del bob &quot;mutant&quot;
+</code></pre>
+
+<p>所以，可以在任意时刻改变可变类型的值。</p>
+
+<p>一些需要了解的知识点：函数参数也可以变成用 mut 修饰的，因为它也是用于绑定的关键字，就像 let 一样。所以上面的例子可以被改写成：</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">mutate</span><span class="p">(</span><span class="k">mut</span><span class="w"> </span><span class="n">value</span>: <span class="nc">Bob</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// 在参数名前直接使用 mut
+</span><span class="c1"></span><span class="w">    </span><span class="n">value</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span>::<span class="n">from_str</span><span class="p">(</span><span class="s">&#34;mutant&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<h3 id="替换-mut-修饰的值">替换 mut 修饰的值</h3>
+
+<p>如果我们重写 <code>mut</code> 修饰的值会发生什么？来看看：</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt"> 1</span><span class="lnt"> 2</span><span class="lnt"> 3</span><span class="lnt"> 4</span><span class="lnt"> 5</span><span class="lnt"> 6</span><span class="lnt"> 7</span><span class="lnt"> 8</span><span class="lnt"> 9</span><span class="lnt">10</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">bob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Bob</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;A&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="o">&amp;</span><span class="n">name</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">[</span><span class="s">&#34;B&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;C&#34;</span><span class="p">].</span><span class="n">iter</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;before overwrite&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w">        </span><span class="n">bob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Bob</span>::<span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="p">);</span><span class="w">
+</span><span class="w">        </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;after overwrite&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w">        </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="p">}</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<pre><code>new bob &quot;A&quot;
+
+before overwrite
+new bob &quot;B&quot;
+del bob &quot;A&quot;
+after overwrite
+
+before overwrite
+new bob &quot;C&quot;
+del bob &quot;B&quot;
+after overwrite
+
+del bob &quot;C&quot;
+</code></pre>
+
+<p>旧的值被销毁了。新的赋值会在作用域结尾处被销毁 &ndash; 除非它被移动了或者是被再次重写。</p>
+
+<h3 id="所有权-可变-规则">所有权(可变)规则</h3>
+
+<p>相对于不可变性，可变性只有一条附加规则：</p>
+
+<ul>
+<li>没有使用的返回值会被销毁</li>
+<li>所有被绑定到 <code>let</code> 的值都会在函数结尾处被销毁，除非它被移动了</li>
+<li><strong>被替换的值将被销毁</strong></li>
+</ul>
+
+<p>很明显了，在 Rust 中，我们可以确定一个值没有所有者或者被引用。</p>
+
+<h2 id="所有权系统的威力">所有权系统的威力</h2>
+
+<p>刚开始这些所有权规则可能看起来有一些限制性，这仅仅是因为你使用了一套新的规则集。他们实际上并没有任何限制，只是给了我们另外一个基础设施去创建高级别架构。</p>
+
+<p>这些架构在别的语言中可能很难实现安全性。即使他们做到了安全性，他们也不能保证编译期就确定安全性。</p>
+
+<p>下面我们来概览一下它们，它们在一个独立的库中。</p>
+
+<h3 id="内存分配">内存分配</h3>
+
+<p>目前为止我们只讨论了类似 integer 的值，它们存活在<strong>栈</strong>上。我们的测试人偶 <code>Bob</code> 就是这样一个类型的值。一些流行的语言也会把值保持在栈上(比如 C# 中的 struct，C艹中非 new 实例化出来的值)，其他大部分语言都不是。</p>
+
+<p>相反的，一个新的构造对象实例(在很多语言中通过 <code>new</code> 操作符创建的)在叫做<strong>堆内存</strong>的地方创建。</p>
+
+<p>堆内存有很多优点。第一，它不受栈大小的限制。把一个大的结构放到栈上可能会马上溢出。第二，它的内存地址不会改变，不想栈地址。每次一个栈内存上面的值被移动或者拷贝，它所有的比特都会被拷贝到栈的另一个地址。当结构小的时候它是很有效率的(因为这样值会挨着嘛)，不过随着结构变大就会变的很慢。</p>
+
+<p><strong>Box</strong> 解决了这个问题，处理方法是把我们创建的值移动到<strong>堆</strong>上，然后在<strong>栈</strong>上存一个指向堆地址的指针。</p>
+
+<p>举个栗子，我们像这样创建 <code>Bob</code> 在堆内存上：</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">bob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Box</span>::<span class="n">new</span><span class="p">(</span><span class="n">Bob</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;A&#34;</span><span class="p">));</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<pre><code>new bob A
+del bob A
+</code></pre>
+
+<p><code>bob</code> 的返回值类型是 <code>Box&lt;Bob&gt;</code>。泛型类型使 <code>Bob</code> 的生命周期被 <code>Box&lt;Bob&gt;</code> 管理，同时当 <code>Box</code> 被删除时它也被随之删除。</p>
+
+<p><code>Box</code> 是不可拷贝的，其所有权机制跟上面提到的一样。当它在栈上的生命周期结束时，它的析构方法 <code>drop</code> 被调用，随后立即调用 <code>Bob</code> 的析构方法 <code>drop</code>，同样会清理堆上的内存。</p>
+
+<p>这些看似琐碎的实现其实是重大的策略。如果我们跟其他语言的解决办法比较，它们大都做了两件事情中的一件。它们或者留给你自己清理内存(用一些讨厌的 <code>delete</code> 语句，可能忘了调用或者调用多次)，或者依赖垃圾回收机制去跟踪内存指针，当这些指针不被引用时清理内存。</p>
+
+<p>在 Rust 中，所有权跟踪不会有运行时消耗，而且会在编译器确认正确性。这个简单的通过 <code>Box</code> 的内存处理方案，小而美，而且经常已经足够用了。</p>
+
+<p>当它真的不够用时，其它的工具会来帮忙。</p>
+
+<h2 id="垃圾回收">垃圾回收</h2>
+
+<p>Rust 有足够的低级别(low-level)工具来用一个库的方式实现垃圾回收。最简单的方案已经存在于 Rust 中：基于引用计数(注意：不是自动引用计数)的垃圾回收。</p>
+
+<p>引用计数的解决方案很容易实现，不过它不是我们所说的真正意义上的垃圾回收。</p>
+
+<p>因此在 Rust 中我们给它起了个新名字叫做：*共享所有权*。<code>std::rc</code> 库提供了在不容 <code>Rc</code> 处理者(handler)中共享同一个值所有权的机制。只要有一个处理者作用于这个值上，这个值就会保持存活。</p>
+
+<p>举个栗子，我们可以创建一个被 <code>Rc</code> 处理者所管理的 bob 实例：</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">rc</span>::<span class="n">Rc</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">bob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Rc</span>::<span class="n">new</span><span class="p">(</span><span class="n">Bob</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;A&#34;</span><span class="p">));</span><span class="w">
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;{:?}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">bob</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<pre><code>new bob A
+Rc(bob A)
+del bob A
+</code></pre>
+
+<p><a href="http://dwz.cn/APyxG">自己试一下</a></p>
+
+<p>我们可以改变 <code>black_hole</code> 函数来接受一个 <code>Rc&lt;Bob&gt;</code> 然后检查是否被销毁。但是我们可以更简单的让它接受<strong>任意类型</strong>的 <code>T</code> 然后实现 <code>Show</code> 特质来方便打印。让我们来让它泛型话：</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">black_hole</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value</span>: <span class="nc">T</span><span class="p">)</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">T</span>: <span class="nc">fmt</span>::<span class="n">Show</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;imminent shrinkage {:?}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<p>工作方式一样，不过我们以后有新的类型改变时就不需要改变这个函数啦~</p>
+
+<p>现在，发送 <code>Rc&lt;Bob&gt;</code> 到 black_hole！</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">bob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Rc</span>::<span class="n">new</span><span class="p">(</span><span class="n">Bob</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;A&#34;</span><span class="p">));</span><span class="w">
+</span><span class="w">    </span><span class="n">black_hole</span><span class="p">(</span><span class="n">bob</span><span class="p">.</span><span class="n">clone</span><span class="p">());</span><span class="w">
+</span><span class="w">    </span><span class="n">print</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;{:?}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">bob</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<pre><code>new bob A
+imminent shrinkage Rc(bob A)
+Rc(bob A)
+del bob A
+</code></pre>
+
+<p><a href="http://dwz.cn/APxTk">自己试一下</a></p>
+
+<p>它在 black_hole 里存活了下来！不过它是怎么工作的？</p>
+
+<p>一旦被 <code>Rc</code> 处理，那么其它地方只要有任何 <code>Rc</code> <strong>克隆</strong>存在，bob 就会一直存活。<code>Rc</code> 在内部使用 <code>Box</code> 把值同引用计数一起放到堆内存。</p>
+
+<p>每次一个新的处理者克隆被创建(通过调用 <code>clone</code> 或者 <code>Rc</code>)，引用计数就会加，当它生命周期结束时，引用计数会减。当引用计数达到 0 时，对象会被销毁，内存也会被释放。</p>
+
+<p>注意：上面所说的 <code>Rc</code> 是不可变的。如果 <code>Bob</code> 的内容需要被改变，他可以被附加的用 <code>RefCell</code> 类型包装，这时就允许<strong>借用(borrow)</strong>单个 bob 实例的引用。下面的例子中它将能在 <code>mutate</code> 函数中被改变。</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span><span class="lnt">7</span><span class="lnt">8</span><span class="lnt">9</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">fn</span> <span class="nf">mutate</span><span class="p">(</span><span class="n">bob</span>: <span class="nc">Rc</span><span class="o">&lt;</span><span class="n">RefCell</span><span class="o">&lt;</span><span class="n">Bob</span><span class="o">&gt;&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="n">bob</span><span class="p">.</span><span class="n">borrow_mut</span><span class="p">().</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">String</span>::<span class="n">from_str</span><span class="p">(</span><span class="s">&#34;mutant&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">bob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Rc</span>::<span class="n">new</span><span class="p">(</span><span class="n">RefCell</span>::<span class="n">new</span><span class="p">(</span><span class="n">Bob</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;A&#34;</span><span class="p">)));</span><span class="w">
+</span><span class="w">    </span><span class="n">mutate</span><span class="p">(</span><span class="n">bob</span><span class="p">.</span><span class="n">clone</span><span class="p">());</span><span class="w">
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;{:?}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">bob</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<pre><code>new bob A
+Rc(RefCell { value: bob mutant })
+del bob mutant
+</code></pre>
+
+<p>这个例子证明了不同的低级别工具是如何以最小的代价来组合实现精确的垃圾回收。</p>
+
+<p>举个栗子，<code>Rc</code> 只能被使用在同一线程中。不过另外一个类型 <code>Arc</code> 可以被不同线程使用。一个可变的 <code>Rc</code> 可能会被多个对象互相引用。不过，<code>Rc</code> 可以被克隆成弱引用(<code>Weak</code>) ，这样就不会参与引用计数了。更多的信息请查看<a href="http://doc.rust-lang.org/std/rc/">官方文档</a>。</p>
+
+<p>最重要的是，更多高级的垃圾回收机制可以(即将)被实现，而且都是使用库的形式。</p>
+
+<h2 id="并发">并发</h2>
+
+<p>让我们看看 Rust 是如何改变我们使用线程的方式的。默认的模式是没有竞态数据。竞态数据不会发生是因为有很多特别的安全方式作用在线程上。原则上，你可以通过这些安全特性创建你自己的线程库，简单是因为所有权模型本身是线程安全的。</p>
+
+<p>考虑一下我们将一个 <code>Bob</code>(可移动的) 和一个 <code>integet</code>(可拷贝的)发送到一个新的 Rust 线程中：</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt"> 1</span><span class="lnt"> 2</span><span class="lnt"> 3</span><span class="lnt"> 4</span><span class="lnt"> 5</span><span class="lnt"> 6</span><span class="lnt"> 7</span><span class="lnt"> 8</span><span class="lnt"> 9</span><span class="lnt">10</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">thread</span>::<span class="n">Thread</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">bob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Bob</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;A&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">i</span><span class="w"> </span>: <span class="kt">i64</span> <span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">;</span><span class="w">
+</span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">guard</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Thread</span>::<span class="n">scoped</span><span class="p">(</span><span class="k">move</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">        </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;From thread, {:?} and {:?}!&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">bob</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span><span class="w">
+</span><span class="w">    </span><span class="p">});</span><span class="w">
+</span><span class="w">    </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s">&#34;waiting for thread to end&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<pre><code>new bob A
+waiting for thread to end
+From thread, bob A and 12i64
+del bob A
+</code></pre>
+
+<p><a href="http://dwz.cn/APyoQ">自己试一下</a></p>
+
+<p>发生了什么？首先，我们创建了两个值：<code>bob</code> 和 <code>i</code>。然后我们通过 <code>Thread::scoped</code> 创建了一个新的线程并且传入一个闭包让它执行。闭包捕获了我们的两个值。</p>
+
+<p>捕获对 <code>bob</code> 和 <code>i</code> 来说意味着不同的事。<code>bob</code> 会移动到闭包中(对外部线程不可用)，<code>i</code> 则会被拷贝到闭包中，不过它还会对外部线程可用。</p>
+
+<p>主线程会停下来等到新创建的线程执行完毕，执行完毕的标志是 <code>guard</code> 达到生命周期的尽头(在这个例子中也就是 <code>main</code> 函数的结尾)。</p>
+
+<p>你可能会指出这跟你之前使用线程没啥区别 &ndash; 我们大家都知道如果没有某些同步机制是不可以随便在不同线程之间共享内存地址的。Rust 的不同之处在于它在编译期就强制了这一点。</p>
+
+<p>当然，我们能获取到 <code>guard</code> 的返回值，也可以创建一个管道在不同线程中来发送和接受值。更多的信息请查看官方<a href="http://doc.rust-lang.org/std/thread/">线程文档</a>，<a href="http://doc.rust-lang.org/std/sync/mpsc/">管道文档</a>，和<a href="http://doc.rust-lang.org/book/threads.html">这本书</a>。</p>
+
+<h2 id="还有啥">还有啥？</h2>
+
+<p>现在我们熟悉了 Rust 中的所有权系统，可以查看文档写安全代码啦。</p>
+
+<p>不过还有一部分还没有讲到：<em>借用系统</em>(borrowing system)。</p>
+
+<p>在这个系列的第二部分中我们将学习为什么借用机制很有用，已经怎么最好的使用它。</p>
+
+<p>原文地址：<a href="http://nercury.github.io/rust/guide/2015/01/19/ownership.html">http://nercury.github.io/rust/guide/2015/01/19/ownership.html</a></p>
+      </article>
+
+      <ul class="pager blog-pager">
+        
+          <li class="previous">
+            <a href="https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/" data-toggle="tooltip" data-placement="top" title="Go 语言中的 new() 和 make() 的区别">&larr; 前一篇</a>
+          </li>
+        
+        
+      </ul>
+
+      
+        
+          <div class="disqus-comments">
+            <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "ariesdevil" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+          </div>
+        
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+
+          &nbsp;&bull;&nbsp;
+          2017
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://ariesdevil.com/">AriesDevil</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          由 <a href="http://gohugo.io">Hugo</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://ariesdevil.com/js/main.js"></script><script> renderMathInElement(document.body); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.js" integrity="sha256-UplRCs9v4KXVJvVY+p+RSo5Q4ilAUXh7kpjyIP5odyc=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.min.js" integrity="sha256-PWHOlUzc96pMc8ThwRIXPn8yH4NOLu42RQ0b9SpnpFk=" crossorigin="anonymous"></script>
+<script src="https://ariesdevil.com/js/load-photoswipe.js"></script>
+
+
+
+  </body>
+</html>
+

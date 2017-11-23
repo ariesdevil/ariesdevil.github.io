@@ -21,5 +21,23 @@
       <description></description>
     </item>
     
+    <item>
+      <title>Memory Management</title>
+      <link>https://ariesdevil.com/tags/memory-management/</link>
+      <pubDate>Wed, 28 Jan 2015 15:56:22 +0800</pubDate>
+      
+      <guid>https://ariesdevil.com/tags/memory-management/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rust</title>
+      <link>https://ariesdevil.com/tags/rust/</link>
+      <pubDate>Wed, 28 Jan 2015 15:56:22 +0800</pubDate>
+      
+      <guid>https://ariesdevil.com/tags/rust/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>
