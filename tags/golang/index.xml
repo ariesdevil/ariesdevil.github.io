@@ -44,6 +44,22 @@
     </item>
     
     <item>
+      <title>Go 语言中的 Array，Slice，Map 和 Set</title>
+      <link>https://ariesdevil.com/post/array-slice-map-and-set-in-golang/</link>
+      <pubDate>Sat, 28 Mar 2015 18:16:37 +0800</pubDate>
+      
+      <guid>https://ariesdevil.com/post/array-slice-map-and-set-in-golang/</guid>
+      <description>&lt;h2 id=&#34;array-数组&#34;&gt;Array(数组)&lt;/h2&gt;
+
+&lt;h3 id=&#34;内部机制&#34;&gt;内部机制&lt;/h3&gt;
+
+&lt;p&gt;在 Go 语言中数组是固定长度的数据类型，它包含相同类型的连续的元素，这些元素可以是内建类型，像数字和字符串，也可以是结构类型，元素可以通过唯一的索引值访问，从 0 开始。&lt;/p&gt;
+
+&lt;p&gt;数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Go 语言中的 new() 和 make() 的区别</title>
       <link>https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/</link>
       <pubDate>Thu, 22 May 2014 15:56:22 +0800</pubDate>
