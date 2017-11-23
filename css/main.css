@@ -29,6 +29,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 a {
   color: #008AFF;
+  word-break: break-all;
 }
 a:hover,
 a:focus {
@@ -236,6 +237,7 @@ img {
   text-decoration: none !important;
   border-width: 0 1px 1px 1px;
   font-weight: normal;
+  word-break: break-word;
 }
 @media only screen and (max-width: 767px) {
   .navbar-custom .nav .navlinks-container.show-children {
@@ -263,6 +265,9 @@ img {
     border: 1px solid #eaeaea;
     border-width: 0 1px 1px;
   }
+  .navbar-custom .nav .navlinks-container .navlinks-children a:hover {
+    background: #bddefb;
+  }
 }
 
 /* --- Footer --- */
@@ -277,6 +282,7 @@ footer {
 
 footer a {
   color: #404040;
+  word-break: break-word;
 }
 
 footer .list-inline {
@@ -363,6 +369,7 @@ footer .theme-by {
 }
 .post-entry {
   width: 100%;
+  word-break: break-all;
 }
 .post-image {
   float: right;
@@ -472,6 +479,7 @@ footer .theme-by {
   padding: 100px 0;
   color: #FFF;
   text-shadow: 1px 1px 3px #000;
+  text-align: center;
 }
 .intro-header .page-heading h1 {
   margin-top: 0;
@@ -480,6 +488,7 @@ footer .theme-by {
 .intro-header .post-heading h1 {
   margin-top: 0;
   font-size: 35px;
+  text-align: center;
 }
 .intro-header .page-heading .page-subheading,
 .intro-header .post-heading .post-subheading {
@@ -489,6 +498,7 @@ footer .theme-by {
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 300;
   margin: 10px 0 0;
+  word-break: break-word;
 }
 .intro-header .post-heading .post-subheading {
   margin-bottom: 20px;
@@ -647,6 +657,7 @@ table tr td {
   text-align: left;
   margin: 0;
   padding: 6px 13px;
+  word-break: break-all;
 }
 table tr th :first-child,
 table tr td :first-child {
