@@ -8,6 +8,11 @@
   </url>
   
   <url>
+    <loc>https://ariesdevil.com/post/methods-interfaces-and-embedded-type-in-golang/</loc>
+    <lastmod>2016-11-23T14:06:35+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ariesdevil.com/post/explore-the-ownership-system-in-rust/</loc>
     <lastmod>2015-01-28T15:56:22+08:00</lastmod>
   </url>
@@ -24,7 +29,7 @@
   
   <url>
     <loc>https://ariesdevil.com/tags/golang/</loc>
-    <lastmod>2014-06-01T00:00:00+00:00</lastmod>
+    <lastmod>2016-11-23T14:06:35+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -36,13 +41,13 @@
   
   <url>
     <loc>https://ariesdevil.com/post/</loc>
-    <lastmod>2015-01-28T15:56:22+08:00</lastmod>
+    <lastmod>2016-11-23T14:06:35+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://ariesdevil.com/categories/programming-language/</loc>
-    <lastmod>2015-01-28T15:56:22+08:00</lastmod>
+    <lastmod>2016-11-23T14:06:35+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -54,7 +59,7 @@
   
   <url>
     <loc>https://ariesdevil.com/tags/</loc>
-    <lastmod>2014-06-01T00:00:00+00:00</lastmod>
+    <lastmod>2016-11-23T14:06:35+08:00</lastmod>
     <priority>0</priority>
   </url>
   
