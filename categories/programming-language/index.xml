@@ -30,8 +30,7 @@
 &lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。&lt;br /&gt;
-&lt;/p&gt;</description>
+&lt;p&gt;在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -42,8 +41,7 @@
       <guid>https://ariesdevil.com/post/choose-whether-to-use-a-value-or-pointer-receiver-on-methods/</guid>
       <description>&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
 
-&lt;p&gt;很多人(特别是新手)在写 Go 语言代码时经常会问一个问题，那就是一个方法的接受者类型到底应该是值类型还是指针类型呢，Go 的 wiki 上对这点做了很好的解释，我来翻译一下。&lt;br /&gt;
-&lt;/p&gt;</description>
+&lt;p&gt;很多人(特别是新手)在写 Go 语言代码时经常会问一个问题，那就是一个方法的接受者类型到底应该是值类型还是指针类型呢，Go 的 wiki 上对这点做了很好的解释，我来翻译一下。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -58,8 +56,7 @@
 
 &lt;p&gt;在 Go 语言中数组是固定长度的数据类型，它包含相同类型的连续的元素，这些元素可以是内建类型，像数字和字符串，也可以是结构类型，元素可以通过唯一的索引值访问，从 0 开始。&lt;/p&gt;
 
-&lt;p&gt;数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。&lt;br /&gt;
-&lt;/p&gt;</description>
+&lt;p&gt;数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -72,9 +69,7 @@
 
 &lt;p&gt;这两个部分的介绍是为了给那些了解 rust 基本语法，写过一些小的 demo 代码，但却不是很清楚 &lt;code&gt;ownership&lt;/code&gt; 和 &lt;code&gt;borrowing&lt;/code&gt; 机制的码农看的。&lt;/p&gt;
 
-&lt;p&gt;我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 &lt;code&gt;let&lt;/code&gt;，&lt;code&gt;fn&lt;/code&gt;，&lt;code&gt;struct&lt;/code&gt;，&lt;code&gt;trait&lt;/code&gt; 和 &lt;code&gt;impl&lt;/code&gt; 概念。&lt;br /&gt;
-&lt;br /&gt;
-我们的目标是学习如果写 rust 代码，而且在写的过程中不要碰到有关 &lt;code&gt;ownership&lt;/code&gt; 和 &lt;code&gt;borrowing&lt;/code&gt; 的墙。&lt;/p&gt;</description>
+&lt;p&gt;我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 &lt;code&gt;let&lt;/code&gt;，&lt;code&gt;fn&lt;/code&gt;，&lt;code&gt;struct&lt;/code&gt;，&lt;code&gt;trait&lt;/code&gt; 和 &lt;code&gt;impl&lt;/code&gt; 概念。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -85,8 +80,7 @@
       <guid>https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/</guid>
       <description>&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
 
-&lt;p&gt;Go 语言中的 &lt;code&gt;new&lt;/code&gt; 和 &lt;code&gt;make&lt;/code&gt; 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。&lt;br /&gt;
-&lt;/p&gt;</description>
+&lt;p&gt;Go 语言中的 &lt;code&gt;new&lt;/code&gt; 和 &lt;code&gt;make&lt;/code&gt; 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。&lt;/p&gt;</description>
     </item>
     
   </channel>

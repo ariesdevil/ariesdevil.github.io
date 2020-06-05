@@ -18,8 +18,7 @@
 
 
 
-在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。
-">
+在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。">
   <meta property="og:description" content="概述
 
 在 Go 语言中，如果一个结构体和一个嵌入字段同时实现了相同的接口会发生什么呢？我们猜一下，可能有两个问题：
@@ -30,8 +29,7 @@
 
 
 
-在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。
-">
+在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。">
   <meta name="twitter:description" content="概述
 
 在 Go 语言中，如果一个结构体和一个嵌入字段同时实现了相同的接口会发生什么呢？我们猜一下，可能有两个问题：
@@ -42,8 +40,7 @@
 
 
 
-在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。
-">
+在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。">
   <meta name="author" content="AriesDevil"/>
   <link href='https://ariesdevil.com/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta name="twitter:card" content="summary" />
@@ -53,7 +50,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="髣髴兮若輕雲之蔽月" />
 
-  <meta name="generator" content="Hugo 0.32-DEV" />
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
   <link rel="canonical" href="https://ariesdevil.com/post/methods-interfaces-and-embedded-type-in-golang/" />
   <link rel="alternate" href="" type="application/rss+xml" title="髣髴兮若輕雲之蔽月">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
@@ -115,12 +112,16 @@
     </div>
 </div>
 
-<script>
-window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-ga('create', 'UA-47298019-3', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-47298019-3', 'auto');
+	
+	ga('send', 'pageview');
+}
 </script>
-<script async src='//www.google-analytics.com/analytics.js'></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
 </head>
 
@@ -280,7 +281,7 @@ autocomplete('#aa-search-input',
 <div>
     <section id="datecount">
         <h4 id="date">发表于 2016-11-23
-  字数 : 3652  阅读时间 : 8 分钟<br></h4>
+  字数 : 3745  阅读时间 : 8 分钟<br></h4>
     </section>
     
     <span class="post-meta">
@@ -321,8 +322,7 @@ autocomplete('#aa-search-input',
 <br /></li>
 </ul>
 
-<p>在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。<br />
-</p>
+<p>在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。</p>
 
 <h2 id="方法">方法</h2>
 
@@ -332,14 +332,20 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">User</span> <span class="kd">struct</span> <span class="p">{</span>
   <span class="nx">Name</span>  <span class="kt">string</span>
   <span class="nx">Email</span> <span class="kt">string</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">u</span> <span class="nx">User</span><span class="p">)</span> <span class="nx">Notify</span><span class="p">()</span> <span class="kt">error</span></code></pre></td></tr></table>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">u</span> <span class="nx">User</span><span class="p">)</span> <span class="nf">Notify</span><span class="p">()</span> <span class="kt">error</span></code></pre></td></tr></table>
 </div>
 </div>
 
@@ -347,15 +353,22 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span><span class="lnt">7</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// User 类型的值可以调用接受者是值的方法
 </span><span class="c1"></span><span class="nx">damon</span> <span class="o">:=</span> <span class="nx">User</span><span class="p">{</span><span class="s">&#34;AriesDevil&#34;</span><span class="p">,</span> <span class="s">&#34;ariesdevil@xxoo.com&#34;</span><span class="p">}</span>
-<span class="nx">damon</span><span class="p">.</span><span class="nx">Notify</span><span class="p">()</span>
+<span class="nx">damon</span><span class="p">.</span><span class="nf">Notify</span><span class="p">()</span>
 
 <span class="c1">// User 类型的指针同样可以调用接受者是值的方法
 </span><span class="c1"></span><span class="nx">alimon</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">User</span><span class="p">{</span><span class="s">&#34;A-limon&#34;</span><span class="p">,</span> <span class="s">&#34;alimon@ooxx.com&#34;</span><span class="p">}</span>
-<span class="nx">alimon</span><span class="p">.</span><span class="nx">Notify</span><span class="p">()</span></code></pre></td></tr></table>
+<span class="nx">alimon</span><span class="p">.</span><span class="nf">Notify</span><span class="p">()</span></code></pre></td></tr></table>
 </div>
 </div>
 
@@ -365,9 +378,10 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">u</span> <span class="o">*</span><span class="nx">User</span><span class="p">)</span> <span class="nx">Notify</span><span class="p">()</span> <span class="kt">error</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">u</span> <span class="o">*</span><span class="nx">User</span><span class="p">)</span> <span class="nf">Notify</span><span class="p">()</span> <span class="kt">error</span></code></pre></td></tr></table>
 </div>
 </div>
 
@@ -375,15 +389,22 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span><span class="lnt">7</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// User 类型的值可以调用接受者是指针的方法
 </span><span class="c1"></span><span class="nx">damon</span> <span class="o">:=</span> <span class="nx">User</span><span class="p">{</span><span class="s">&#34;AriesDevil&#34;</span><span class="p">,</span> <span class="s">&#34;ariesdevil@xxoo.com&#34;</span><span class="p">}</span>
-<span class="nx">damon</span><span class="p">.</span><span class="nx">Notify</span><span class="p">()</span>
+<span class="nx">damon</span><span class="p">.</span><span class="nf">Notify</span><span class="p">()</span>
 
 <span class="c1">// User 类型的指针同样可以调用接受者是指针的方法
 </span><span class="c1"></span><span class="nx">alimon</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">User</span><span class="p">{</span><span class="s">&#34;A-limon&#34;</span><span class="p">,</span> <span class="s">&#34;alimon@ooxx.com&#34;</span><span class="p">}</span>
-<span class="nx">alimon</span><span class="p">.</span><span class="nx">Notify</span><span class="p">()</span></code></pre></td></tr></table>
+<span class="nx">alimon</span><span class="p">.</span><span class="nf">Notify</span><span class="p">()</span></code></pre></td></tr></table>
 </div>
 </div>
 
@@ -397,10 +418,13 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Notifier</span> <span class="kd">interface</span> <span class="p">{</span>
-  <span class="nx">Notify</span><span class="p">()</span> <span class="kt">error</span>
+  <span class="nf">Notify</span><span class="p">()</span> <span class="kt">error</span>
 <span class="p">}</span></code></pre></td></tr></table>
 </div>
 </div>
@@ -417,10 +441,13 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">SendNotification</span><span class="p">(</span><span class="nx">notify</span> <span class="nx">Notifier</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="nx">notify</span><span class="p">.</span><span class="nx">Notify</span><span class="p">()</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">SendNotification</span><span class="p">(</span><span class="nx">notify</span> <span class="nx">Notifier</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">notify</span><span class="p">.</span><span class="nf">Notify</span><span class="p">()</span>
 <span class="p">}</span></code></pre></td></tr></table>
 </div>
 </div>
@@ -431,27 +458,46 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1</span><span class="lnt"> 2</span><span class="lnt"> 3</span><span class="lnt"> 4</span><span class="lnt"> 5</span><span class="lnt"> 6</span><span class="lnt"> 7</span><span class="lnt"> 8</span><span class="lnt"> 9</span><span class="lnt">10</span><span class="lnt">11</span><span class="lnt">12</span><span class="lnt">13</span><span class="lnt">14</span><span class="lnt">15</span><span class="lnt">16</span><span class="lnt">17</span><span class="lnt">18</span><span class="lnt">19</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">u</span> <span class="o">*</span><span class="nx">User</span><span class="p">)</span> <span class="nx">Notify</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
-  <span class="nx">log</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&#34;User: Sending User Email To %s&lt;%s&gt;\n&#34;</span><span class="p">,</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">u</span> <span class="o">*</span><span class="nx">User</span><span class="p">)</span> <span class="nf">Notify</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+  <span class="nx">log</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;User: Sending User Email To %s&lt;%s&gt;\n&#34;</span><span class="p">,</span>
       <span class="nx">u</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span>
       <span class="nx">u</span><span class="p">.</span><span class="nx">Email</span><span class="p">)</span>
   <span class="k">return</span> <span class="kc">nil</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">user</span> <span class="o">:=</span> <span class="nx">User</span><span class="p">{</span>
     <span class="nx">Name</span><span class="p">:</span>  <span class="s">&#34;AriesDevil&#34;</span><span class="p">,</span>
     <span class="nx">Email</span><span class="p">:</span> <span class="s">&#34;ariesdevil@xxoo.com&#34;</span><span class="p">,</span>
   <span class="p">}</span>
   
-  <span class="nx">SendNotification</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+  <span class="nf">SendNotification</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="c1">// Output:
-</span><span class="c1"></span><span class="nx">cannot</span> <span class="nx">use</span> <span class="nx">user</span> <span class="p">(</span><span class="kd">type</span> <span class="nx">User</span><span class="p">)</span> <span class="nx">as</span> <span class="kd">type</span> <span class="nx">Notifier</span> <span class="nx">in</span> <span class="nx">function</span> <span class="nx">argument</span><span class="p">:</span>
-<span class="nx">User</span> <span class="nx">does</span> <span class="nx">not</span> <span class="nx">implement</span> <span class="nx">Notifier</span> <span class="p">(</span><span class="nx">Notify</span> <span class="nx">method</span> <span class="nx">has</span> <span class="nx">pointer</span> <span class="nx">receiver</span><span class="p">)</span></code></pre></td></tr></table>
+</span><span class="c1"></span><span class="nx">cannot</span> <span class="nx">use</span> <span class="nf">user</span> <span class="p">(</span><span class="kd">type</span> <span class="nx">User</span><span class="p">)</span> <span class="nx">as</span> <span class="kd">type</span> <span class="nx">Notifier</span> <span class="nx">in</span> <span class="nx">function</span> <span class="nx">argument</span><span class="p">:</span>
+<span class="nx">User</span> <span class="nx">does</span> <span class="nx">not</span> <span class="nx">implement</span> <span class="nf">Notifier</span> <span class="p">(</span><span class="nx">Notify</span> <span class="nx">method</span> <span class="nx">has</span> <span class="nx">pointer</span> <span class="nx">receiver</span><span class="p">)</span></code></pre></td></tr></table>
 </div>
 </div>
 
@@ -484,15 +530,26 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1</span><span class="lnt"> 2</span><span class="lnt"> 3</span><span class="lnt"> 4</span><span class="lnt"> 5</span><span class="lnt"> 6</span><span class="lnt"> 7</span><span class="lnt"> 8</span><span class="lnt"> 9</span><span class="lnt">10</span><span class="lnt">11</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">user</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">User</span><span class="p">{</span>
     <span class="nx">Name</span><span class="p">:</span>  <span class="s">&#34;AriesDevil&#34;</span><span class="p">,</span>
     <span class="nx">Email</span><span class="p">:</span> <span class="s">&#34;ariesdevil@xxoo.com&#34;</span><span class="p">,</span>
   <span class="p">}</span>
   
-  <span class="nx">SendNotification</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+  <span class="nf">SendNotification</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="c1">// Output:
@@ -510,7 +567,11 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Admin</span> <span class="kd">struct</span> <span class="p">{</span>
   <span class="nx">User</span>
@@ -525,9 +586,23 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1</span><span class="lnt"> 2</span><span class="lnt"> 3</span><span class="lnt"> 4</span><span class="lnt"> 5</span><span class="lnt"> 6</span><span class="lnt"> 7</span><span class="lnt"> 8</span><span class="lnt"> 9</span><span class="lnt">10</span><span class="lnt">11</span><span class="lnt">12</span><span class="lnt">13</span><span class="lnt">14</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">admin</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">Admin</span><span class="p">{</span>
     <span class="nx">User</span><span class="p">:</span> <span class="nx">User</span><span class="p">{</span>
       <span class="nx">Name</span><span class="p">:</span>  <span class="s">&#34;AriesDevil&#34;</span><span class="p">,</span>
@@ -536,7 +611,7 @@ autocomplete('#aa-search-input',
     <span class="nx">Level</span><span class="p">:</span> <span class="s">&#34;master&#34;</span><span class="p">,</span>
   <span class="p">}</span>
   
-  <span class="nx">SendNotification</span><span class="p">(</span><span class="nx">admin</span><span class="p">)</span>
+  <span class="nf">SendNotification</span><span class="p">(</span><span class="nx">admin</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="c1">// Output
@@ -558,9 +633,13 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">admin</span><span class="p">.</span><span class="nx">User</span><span class="p">.</span><span class="nx">Notify</span><span class="p">()</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">admin</span><span class="p">.</span><span class="nx">User</span><span class="p">.</span><span class="nf">Notify</span><span class="p">()</span>
 
 <span class="c1">// Output
 </span><span class="c1"></span><span class="nx">User</span><span class="p">:</span> <span class="nx">Sending</span> <span class="nx">User</span> <span class="nx">Email</span> <span class="nx">To</span> <span class="nx">AriesDevil</span><span class="p">&lt;</span><span class="nx">ariesdevil</span><span class="err">@</span><span class="nx">xxoo</span><span class="p">.</span><span class="nx">com</span><span class="p">&gt;</span></code></pre></td></tr></table>
@@ -573,9 +652,13 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">admin</span><span class="p">.</span><span class="nx">Notify</span><span class="p">()</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">admin</span><span class="p">.</span><span class="nf">Notify</span><span class="p">()</span>
 
 <span class="c1">// Output
 </span><span class="c1"></span><span class="nx">User</span><span class="p">:</span> <span class="nx">Sending</span> <span class="nx">User</span> <span class="nx">Email</span> <span class="nx">To</span> <span class="nx">AriesDevil</span><span class="p">&lt;</span><span class="nx">ariesdevil</span><span class="err">@</span><span class="nx">xxoo</span><span class="p">.</span><span class="nx">com</span><span class="p">&gt;</span></code></pre></td></tr></table>
@@ -619,10 +702,17 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span><span class="lnt">7</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">a</span> <span class="o">*</span><span class="nx">Admin</span><span class="p">)</span> <span class="nx">Notify</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
-  <span class="nx">log</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&#34;Admin: Sending Admin Email To %s&lt;%s&gt;\n&#34;</span><span class="p">,</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">a</span> <span class="o">*</span><span class="nx">Admin</span><span class="p">)</span> <span class="nf">Notify</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+  <span class="nx">log</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Admin: Sending Admin Email To %s&lt;%s&gt;\n&#34;</span><span class="p">,</span>
       <span class="nx">a</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span>
       <span class="nx">a</span><span class="p">.</span><span class="nx">Email</span><span class="p">)</span>
       
@@ -637,9 +727,23 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1</span><span class="lnt"> 2</span><span class="lnt"> 3</span><span class="lnt"> 4</span><span class="lnt"> 5</span><span class="lnt"> 6</span><span class="lnt"> 7</span><span class="lnt"> 8</span><span class="lnt"> 9</span><span class="lnt">10</span><span class="lnt">11</span><span class="lnt">12</span><span class="lnt">13</span><span class="lnt">14</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">admin</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">Admin</span><span class="p">{</span>
     <span class="nx">User</span><span class="p">:</span> <span class="nx">User</span><span class="p">{</span>
       <span class="nx">Name</span><span class="p">:</span>  <span class="s">&#34;AriesDevil&#34;</span><span class="p">,</span>
@@ -648,7 +752,7 @@ autocomplete('#aa-search-input',
     <span class="nx">Level</span><span class="p">:</span> <span class="s">&#34;master&#34;</span><span class="p">,</span>
   <span class="p">}</span>
   
-  <span class="nx">SendNotification</span><span class="p">(</span><span class="nx">admin</span><span class="p">)</span>
+  <span class="nf">SendNotification</span><span class="p">(</span><span class="nx">admin</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="c1">// Output
@@ -662,9 +766,13 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">admin</span><span class="p">.</span><span class="nx">Notify</span><span class="p">()</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">admin</span><span class="p">.</span><span class="nf">Notify</span><span class="p">()</span>
 
 <span class="c1">// Output
 </span><span class="c1"></span><span class="nx">Admin</span><span class="p">:</span> <span class="nx">Sending</span> <span class="nx">Admin</span> <span class="nx">Email</span> <span class="nx">To</span> <span class="nx">AriesDevil</span><span class="p">&lt;</span><span class="nx">ariesdevil</span><span class="err">@</span><span class="nx">xxoo</span><span class="p">.</span><span class="nx">com</span><span class="p">&gt;</span></code></pre></td></tr></table>
@@ -711,7 +819,7 @@ autocomplete('#aa-search-input',
         
           <div class="disqus-comments">
             <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     

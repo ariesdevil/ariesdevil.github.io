@@ -10,16 +10,13 @@
   <meta name="twitter:title" content="Go 语言中的 new() 和 make() 的区别" />
   <meta name="description" content="概述
 
-Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。
-">
+Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。">
   <meta property="og:description" content="概述
 
-Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。
-">
+Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。">
   <meta name="twitter:description" content="概述
 
-Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。
-">
+Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。">
   <meta name="author" content="AriesDevil"/>
   <link href='https://ariesdevil.com/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta name="twitter:card" content="summary" />
@@ -29,7 +26,7 @@ Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="髣髴兮若輕雲之蔽月" />
 
-  <meta name="generator" content="Hugo 0.32-DEV" />
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
   <link rel="canonical" href="https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/" />
   <link rel="alternate" href="" type="application/rss+xml" title="髣髴兮若輕雲之蔽月">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
@@ -91,12 +88,16 @@ Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一
     </div>
 </div>
 
-<script>
-window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-ga('create', 'UA-47298019-3', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-47298019-3', 'auto');
+	
+	ga('send', 'pageview');
+}
 </script>
-<script async src='//www.google-analytics.com/analytics.js'></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
 </head>
 
@@ -256,7 +257,7 @@ autocomplete('#aa-search-input',
 <div>
     <section id="datecount">
         <h4 id="date">发表于 2014-05-22
-  字数 : 636  阅读时间 : 2 分钟<br></h4>
+  字数 : 641  阅读时间 : 2 分钟<br></h4>
     </section>
     
     <span class="post-meta">
@@ -286,8 +287,7 @@ autocomplete('#aa-search-input',
       <article role="main" class="blog-post">
         <h2 id="概述">概述</h2>
 
-<p>Go 语言中的 <code>new</code> 和 <code>make</code> 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。<br />
-</p>
+<p>Go 语言中的 <code>new</code> 和 <code>make</code> 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。</p>
 
 <h2 id="new-的主要特性">new 的主要特性</h2>
 
@@ -295,7 +295,8 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nb">new</span><span class="p">(</span><span class="nx">Type</span><span class="p">)</span> <span class="o">*</span><span class="nx">Type</span></code></pre></td></tr></table>
 </div>
@@ -311,14 +312,20 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">newInt</span><span class="p">()</span> <span class="o">*</span><span class="kt">int</span> <span class="p">{</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">newInt</span><span class="p">()</span> <span class="o">*</span><span class="kt">int</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">i</span> <span class="kt">int</span>
   <span class="k">return</span> <span class="o">&amp;</span><span class="nx">i</span>
 <span class="p">}</span>
 
-<span class="nx">someInt</span> <span class="o">:=</span> <span class="nx">newInt</span><span class="p">()</span></code></pre></td></tr></table>
+<span class="nx">someInt</span> <span class="o">:=</span> <span class="nf">newInt</span><span class="p">()</span></code></pre></td></tr></table>
 </div>
 </div>
 
@@ -330,7 +337,8 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nb">make</span><span class="p">(</span><span class="nx">Type</span><span class="p">,</span> <span class="nx">size</span> <span class="nx">IntegerType</span><span class="p">)</span> <span class="nx">Type</span></code></pre></td></tr></table>
 </div>
@@ -371,7 +379,7 @@ Channel: 管道缓冲区依据缓冲区容量被初始化。如果容量为 0 �
         
           <div class="disqus-comments">
             <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     

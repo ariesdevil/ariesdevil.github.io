@@ -5,9 +5,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <title>Memory Management</title>
-  <meta property="og:title" content="Memory Management" />
-  <meta name="twitter:title" content="Memory Management" />
+  <title>memory management</title>
+  <meta property="og:title" content="memory management" />
+  <meta name="twitter:title" content="memory management" />
   <meta name="author" content="AriesDevil"/>
   <link href='https://ariesdevil.com/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta name="twitter:card" content="summary" />
@@ -17,7 +17,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="髣髴兮若輕雲之蔽月" />
 
-  <meta name="generator" content="Hugo 0.32-DEV" />
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
   <link rel="canonical" href="https://ariesdevil.com/tags/memory-management/" />
   <link rel="alternate" href="https://ariesdevil.com/tags/memory-management/index.xml" type="application/rss+xml" title="髣髴兮若輕雲之蔽月">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
@@ -79,12 +79,16 @@
     </div>
 </div>
 
-<script>
-window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-ga('create', 'UA-47298019-3', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-47298019-3', 'auto');
+	
+	ga('send', 'pageview');
+}
 </script>
-<script async src='//www.google-analytics.com/analytics.js'></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
 </head>
 
@@ -207,7 +211,7 @@ autocomplete('#aa-search-input',
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
             <div class="page-heading">
-              <h1>#Memory Management</h1>
+              <h1>#memory management</h1>
               <hr class="small">
             </div>
           </div>
@@ -232,7 +236,7 @@ autocomplete('#aa-search-input',
 
               <p class="post-meta">
                 发表于 2015-01-28
-                字数 : 4518  阅读时间 : 10 分钟
+                字数 : 4619  阅读时间 : 10 分钟
               </p>
               <div class="post-entry">
                 
@@ -240,9 +244,7 @@ autocomplete('#aa-search-input',
 
 <p>这两个部分的介绍是为了给那些了解 rust 基本语法，写过一些小的 demo 代码，但却不是很清楚 <code>ownership</code> 和 <code>borrowing</code> 机制的码农看的。</p>
 
-<p>我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 <code>let</code>，<code>fn</code>，<code>struct</code>，<code>trait</code> 和 <code>impl</code> 概念。<br />
-<br />
-我们的目标是学习如果写 rust 代码，而且在写的过程中不要碰到有关 <code>ownership</code> 和 <code>borrowing</code> 的墙。</p>
+<p>我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 <code>let</code>，<code>fn</code>，<code>struct</code>，<code>trait</code> 和 <code>impl</code> 概念。</p>
                   <a href="https://ariesdevil.com/post/explore-the-ownership-system-in-rust/" class="post-read-more">[阅读全文]</a>
                 
               </div>

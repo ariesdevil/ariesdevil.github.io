@@ -14,24 +14,21 @@
 
 在 Go 语言中数组是固定长度的数据类型，它包含相同类型的连续的元素，这些元素可以是内建类型，像数字和字符串，也可以是结构类型，元素可以通过唯一的索引值访问，从 0 开始。
 
-数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。
-">
+数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。">
   <meta property="og:description" content="Array(数组)
 
 内部机制
 
 在 Go 语言中数组是固定长度的数据类型，它包含相同类型的连续的元素，这些元素可以是内建类型，像数字和字符串，也可以是结构类型，元素可以通过唯一的索引值访问，从 0 开始。
 
-数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。
-">
+数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。">
   <meta name="twitter:description" content="Array(数组)
 
 内部机制
 
 在 Go 语言中数组是固定长度的数据类型，它包含相同类型的连续的元素，这些元素可以是内建类型，像数字和字符串，也可以是结构类型，元素可以通过唯一的索引值访问，从 0 开始。
 
-数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。
-">
+数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。">
   <meta name="author" content="AriesDevil"/>
   <link href='https://ariesdevil.com/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta name="twitter:card" content="summary" />
@@ -41,7 +38,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="髣髴兮若輕雲之蔽月" />
 
-  <meta name="generator" content="Hugo 0.32-DEV" />
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
   <link rel="canonical" href="https://ariesdevil.com/post/array-slice-map-and-set-in-golang/" />
   <link rel="alternate" href="" type="application/rss+xml" title="髣髴兮若輕雲之蔽月">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
@@ -103,12 +100,16 @@
     </div>
 </div>
 
-<script>
-window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-ga('create', 'UA-47298019-3', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-47298019-3', 'auto');
+	
+	ga('send', 'pageview');
+}
 </script>
-<script async src='//www.google-analytics.com/analytics.js'></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
 </head>
 
@@ -268,7 +269,7 @@ autocomplete('#aa-search-input',
 <div>
     <section id="datecount">
         <h4 id="date">发表于 2015-03-28
-  字数 : 5883  阅读时间 : 12 分钟<br></h4>
+  字数 : 6198  阅读时间 : 13 分钟<br></h4>
     </section>
     
     <span class="post-meta">
@@ -327,8 +328,7 @@ autocomplete('#aa-search-input',
 
 <p>在 Go 语言中数组是固定长度的数据类型，它包含相同类型的连续的元素，这些元素可以是内建类型，像数字和字符串，也可以是结构类型，元素可以通过唯一的索引值访问，从 0 开始。</p>
 
-<p>数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。<br />
-</p>
+<p>数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。</p>
 
 <h3 id="数组声明和初始化">数组声明和初始化</h3>
 
@@ -336,7 +336,9 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 声明一个长度为5的整数数组
 </span><span class="c1"></span><span class="kd">var</span> <span class="nx">array</span> <span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="kt">int</span></code></pre></td></tr></table>
@@ -351,7 +353,10 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 声明一个长度为5的整数数组
 </span><span class="c1">// 初始化每个元素
@@ -363,7 +368,9 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 通过初始化值的个数来推导出数组容量
 </span><span class="c1"></span><span class="nx">array</span> <span class="o">:=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">7</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">777</span><span class="p">,</span> <span class="mi">7777</span><span class="p">,</span> <span class="mi">77777</span><span class="p">}</span></code></pre></td></tr></table>
@@ -374,7 +381,11 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 声明一个长度为5的整数数组
 </span><span class="c1">// 为索引为1和2的位置指定元素初始化
@@ -389,7 +400,10 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">array</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">7</span><span class="p">,</span> <span class="mi">77</span><span class="p">,</span> <span class="mi">777</span><span class="p">,</span> <span class="mi">7777</span><span class="p">,</span> <span class="mi">77777</span><span class="p">}</span>
 <span class="c1">// 改变索引为2的元素的值
@@ -401,7 +415,12 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">array</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">*</span><span class="kt">int</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="nb">new</span><span class="p">(</span><span class="kt">int</span><span class="p">),</span> <span class="mi">1</span><span class="p">:</span> <span class="nb">new</span><span class="p">(</span><span class="kt">int</span><span class="p">)}</span>
 
@@ -415,7 +434,10 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">array1</span> <span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="kt">string</span>
 <span class="nx">array2</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;Red&#34;</span><span class="p">,</span> <span class="s">&#34;Blue&#34;</span><span class="p">,</span> <span class="s">&#34;Green&#34;</span><span class="p">,</span> <span class="s">&#34;Yellow&#34;</span><span class="p">,</span> <span class="s">&#34;Pink&#34;</span><span class="p">}</span>
@@ -427,7 +449,14 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span><span class="lnt">7</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">array1</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">string</span>
 <span class="nx">array2</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;Red&#34;</span><span class="p">,</span> <span class="s">&#34;Blue&#34;</span><span class="p">,</span> <span class="s">&#34;Green&#34;</span><span class="p">,</span> <span class="s">&#34;Yellow&#34;</span><span class="p">,</span> <span class="s">&#34;Pink&#34;</span><span class="p">}</span>
@@ -435,7 +464,7 @@ autocomplete('#aa-search-input',
 
 <span class="c1">// 编译器会报错
 </span><span class="c1"></span><span class="nx">Compiler</span> <span class="nx">Error</span><span class="p">:</span>
-<span class="nx">cannot</span> <span class="nx">use</span> <span class="nx">array2</span> <span class="p">(</span><span class="kd">type</span> <span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="kt">string</span><span class="p">)</span> <span class="nx">as</span> <span class="kd">type</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">string</span> <span class="nx">in</span> <span class="nx">assignment</span></code></pre></td></tr></table>
+<span class="nx">cannot</span> <span class="nx">use</span> <span class="nf">array2</span> <span class="p">(</span><span class="kd">type</span> <span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="kt">string</span><span class="p">)</span> <span class="nx">as</span> <span class="kd">type</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">string</span> <span class="nx">in</span> <span class="nx">assignment</span></code></pre></td></tr></table>
 </div>
 </div>
 
@@ -443,7 +472,15 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span><span class="lnt">7</span><span class="lnt">8</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">array1</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="kt">string</span>
 <span class="nx">array2</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="kt">string</span><span class="p">{</span><span class="nb">new</span><span class="p">(</span><span class="kt">string</span><span class="p">),</span> <span class="nb">new</span><span class="p">(</span><span class="kt">string</span><span class="p">),</span> <span class="nb">new</span><span class="p">(</span><span class="kt">string</span><span class="p">)}</span>
@@ -462,7 +499,18 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1</span><span class="lnt"> 2</span><span class="lnt"> 3</span><span class="lnt"> 4</span><span class="lnt"> 5</span><span class="lnt"> 6</span><span class="lnt"> 7</span><span class="lnt"> 8</span><span class="lnt"> 9</span><span class="lnt">10</span><span class="lnt">11</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 声明一个二维数组
 </span><span class="c1"></span><span class="kd">var</span> <span class="nx">array</span> <span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="kt">int</span>
@@ -482,7 +530,13 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">array</span> <span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="kt">int</span>
 
@@ -497,7 +551,16 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span><span class="lnt">7</span><span class="lnt">8</span><span class="lnt">9</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">array1</span> <span class="p">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="kt">int</span>
 <span class="kd">var</span> <span class="nx">array2</span> <span class="p">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="kt">int</span>
@@ -515,7 +578,9 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">array3</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="kt">int</span> <span class="p">=</span> <span class="nx">array1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <span class="kd">var</span> <span class="nx">value</span> <span class="kt">int</span> <span class="p">=</span> <span class="nx">array1</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></code></pre></td></tr></table>
@@ -530,11 +595,16 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">array</span> <span class="p">[</span><span class="mf">1e6</span><span class="p">]</span><span class="kt">int</span>
-<span class="nx">foo</span><span class="p">(</span><span class="nx">array</span><span class="p">)</span>
-<span class="kd">func</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">array</span> <span class="p">[</span><span class="mf">1e6</span><span class="p">]</span><span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+<span class="nf">foo</span><span class="p">(</span><span class="nx">array</span><span class="p">)</span>
+<span class="kd">func</span> <span class="nf">foo</span><span class="p">(</span><span class="nx">array</span> <span class="p">[</span><span class="mf">1e6</span><span class="p">]</span><span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
   <span class="o">...</span>
 <span class="p">}</span></code></pre></td></tr></table>
 </div>
@@ -546,11 +616,16 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">array</span> <span class="p">[</span><span class="mf">1e6</span><span class="p">]</span><span class="kt">int</span>
-<span class="nx">foo</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">array</span><span class="p">)</span>
-<span class="kd">func</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">array</span> <span class="o">*</span><span class="p">[</span><span class="mf">1e6</span><span class="p">]</span><span class="kt">int</span><span class="p">){</span>
+<span class="nf">foo</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">array</span><span class="p">)</span>
+<span class="kd">func</span> <span class="nf">foo</span><span class="p">(</span><span class="nx">array</span> <span class="o">*</span><span class="p">[</span><span class="mf">1e6</span><span class="p">]</span><span class="kt">int</span><span class="p">){</span>
   <span class="o">...</span>
 <span class="p">}</span></code></pre></td></tr></table>
 </div>
@@ -581,7 +656,8 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">slice</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">string</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span></code></pre></td></tr></table>
 </div>
@@ -591,7 +667,8 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">slice</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span></code></pre></td></tr></table>
 </div>
@@ -603,7 +680,11 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">slice</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 
@@ -616,7 +697,10 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 创建一个字符串 slice
 </span><span class="c1">// 长度和容量都是 5
@@ -628,7 +712,10 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 创建一个字符串 slice
 </span><span class="c1">// 初始化一个有100个元素的空的字符串 slice
@@ -642,7 +729,8 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">slice</span> <span class="p">[]</span><span class="kt">int</span></code></pre></td></tr></table>
 </div>
@@ -654,7 +742,12 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 使用 make 创建
 </span><span class="c1"></span><span class="nx">silce</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -674,7 +767,9 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">}</span>
 <span class="nx">slice</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="mi">25</span></code></pre></td></tr></table>
@@ -685,7 +780,12 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 长度为5，容量为5
 </span><span class="c1"></span><span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">}</span>
@@ -701,7 +801,10 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">对于</span> <span class="nx">slice</span><span class="p">[</span><span class="nx">i</span><span class="p">:</span><span class="nx">j</span><span class="p">]</span> <span class="nx">和底层容量为</span> <span class="nx">k</span> <span class="nx">的数组</span>
 <span class="nx">长度</span><span class="err">：</span><span class="nx">j</span> <span class="o">-</span> <span class="nx">i</span>
@@ -713,7 +816,10 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">}</span>
 <span class="nx">newSlice</span> <span class="o">:=</span> <span class="nx">slice</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
@@ -727,7 +833,13 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">}</span>
 <span class="nx">newSlice</span> <span class="o">:=</span> <span class="nx">slice</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
@@ -748,7 +860,15 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span><span class="lnt">7</span><span class="lnt">8</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 创建一个长度和容量都为5的 slice
 </span><span class="c1"></span><span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">}</span>
@@ -767,7 +887,12 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 创建长度和容量都为4的 slice
 </span><span class="c1"></span><span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">}</span>
@@ -785,7 +910,11 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">source</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;apple&#34;</span><span class="p">,</span> <span class="s">&#34;orange&#34;</span><span class="p">,</span> <span class="s">&#34;plum&#34;</span><span class="p">,</span> <span class="s">&#34;banana&#34;</span><span class="p">,</span> <span class="s">&#34;grape&#34;</span><span class="p">}</span>
 
@@ -798,7 +927,11 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">对于</span> <span class="nx">slice</span><span class="p">[</span><span class="nx">i</span><span class="p">:</span><span class="nx">j</span><span class="p">:</span><span class="nx">k</span><span class="p">]</span>  <span class="nx">或者</span> <span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
 
@@ -811,7 +944,12 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">slice</span> <span class="o">:=</span> <span class="nx">source</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span>
 
@@ -825,7 +963,15 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span><span class="lnt">7</span><span class="lnt">8</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">source</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;apple&#34;</span><span class="p">,</span> <span class="s">&#34;orange&#34;</span><span class="p">,</span> <span class="s">&#34;plum&#34;</span><span class="p">,</span> <span class="s">&#34;banana&#34;</span><span class="p">,</span> <span class="s">&#34;grape&#34;</span><span class="p">}</span>
 
@@ -844,12 +990,19 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span><span class="lnt">7</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">s1</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">}</span>
 <span class="nx">s2</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">}</span>
 
-<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&#34;%v\n&#34;</span><span class="p">,</span> <span class="nb">append</span><span class="p">(</span><span class="nx">s1</span><span class="p">,</span> <span class="nx">s2</span><span class="o">...</span><span class="p">))</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%v\n&#34;</span><span class="p">,</span> <span class="nb">append</span><span class="p">(</span><span class="nx">s1</span><span class="p">,</span> <span class="nx">s2</span><span class="o">...</span><span class="p">))</span>
 
 <span class="nx">Output</span><span class="p">:</span>
 <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span><span class="p">]</span></code></pre></td></tr></table>
@@ -862,12 +1015,24 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1</span><span class="lnt"> 2</span><span class="lnt"> 3</span><span class="lnt"> 4</span><span class="lnt"> 5</span><span class="lnt"> 6</span><span class="lnt"> 7</span><span class="lnt"> 8</span><span class="lnt"> 9</span><span class="lnt">10</span><span class="lnt">11</span><span class="lnt">12</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">}</span>
 
 <span class="k">for</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">slice</span> <span class="p">{</span>
-  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&#34;Index: %d  Value: %d\n&#34;</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
+  <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Index: %d  Value: %d\n&#34;</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="nx">Output</span><span class="p">:</span>
@@ -883,12 +1048,23 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1</span><span class="lnt"> 2</span><span class="lnt"> 3</span><span class="lnt"> 4</span><span class="lnt"> 5</span><span class="lnt"> 6</span><span class="lnt"> 7</span><span class="lnt"> 8</span><span class="lnt"> 9</span><span class="lnt">10</span><span class="lnt">11</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span> <span class="p">,</span><span class="mi">40</span><span class="p">}</span>
 
 <span class="k">for</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">slice</span> <span class="p">{</span>
-  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&#34;Value: %d  Value-Addr: %X  ElemAddr: %X\n&#34;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">value</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">slice</span><span class="p">[</span><span class="nx">index</span><span class="p">])</span>
+  <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Value: %d  Value-Addr: %X  ElemAddr: %X\n&#34;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">value</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">slice</span><span class="p">[</span><span class="nx">index</span><span class="p">])</span>
 <span class="p">}</span>
 
 <span class="nx">Output</span><span class="p">:</span>
@@ -905,12 +1081,24 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1</span><span class="lnt"> 2</span><span class="lnt"> 3</span><span class="lnt"> 4</span><span class="lnt"> 5</span><span class="lnt"> 6</span><span class="lnt"> 7</span><span class="lnt"> 8</span><span class="lnt"> 9</span><span class="lnt">10</span><span class="lnt">11</span><span class="lnt">12</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">}</span>
 
 <span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">slice</span> <span class="p">{</span>
-  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&#34;Value: %d\n&#34;</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
+  <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Value: %d\n&#34;</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
 <span class="p">}</span>
 
 
@@ -926,12 +1114,22 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1</span><span class="lnt"> 2</span><span class="lnt"> 3</span><span class="lnt"> 4</span><span class="lnt"> 5</span><span class="lnt"> 6</span><span class="lnt"> 7</span><span class="lnt"> 8</span><span class="lnt"> 9</span><span class="lnt">10</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">slice</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">}</span>
 
-<span class="k">for</span> <span class="nx">index</span> <span class="o">:=</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">index</span> <span class="p">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">);</span> <span class="nx">index</span><span class="o">++</span> <span class="p">{</span>
-  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&#34;Index: %d  Value: %d\n&#34;</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">slice</span><span class="p">[</span><span class="nx">index</span><span class="p">])</span>
+<span class="k">for</span> <span class="nx">index</span> <span class="o">:=</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">index</span> <span class="o">&amp;</span><span class="nx">lt</span><span class="p">;</span> <span class="nb">len</span><span class="p">(</span><span class="nx">slice</span><span class="p">);</span> <span class="nx">index</span><span class="o">++</span> <span class="p">{</span>
+  <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Index: %d  Value: %d\n&#34;</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">slice</span><span class="p">[</span><span class="nx">index</span><span class="p">])</span>
 <span class="p">}</span>
 
 
@@ -949,7 +1147,8 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">slice</span> <span class="o">:=</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">{{</span><span class="mi">10</span><span class="p">},</span> <span class="p">{</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">}}</span></code></pre></td></tr></table>
 </div>
@@ -959,7 +1158,9 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">slice</span> <span class="o">:=</span> <span class="p">[][]</span><span class="kt">int</span><span class="p">{{</span><span class="mi">10</span><span class="p">},</span> <span class="p">{</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">}}</span>
 <span class="nx">slice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">slice</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">20</span><span class="p">)</span></code></pre></td></tr></table>
@@ -974,13 +1175,21 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span><span class="lnt">7</span><span class="lnt">8</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">slice</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mf">1e6</span><span class="p">)</span>
 
-<span class="nx">slice</span> <span class="p">=</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">slice</span><span class="p">)</span>
+<span class="nx">slice</span> <span class="p">=</span> <span class="nf">foo</span><span class="p">(</span><span class="nx">slice</span><span class="p">)</span>
 
-<span class="kd">func</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">slice</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">foo</span><span class="p">(</span><span class="nx">slice</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
     <span class="o">...</span>
     <span class="k">return</span> <span class="nx">slice</span>
 <span class="p">}</span></code></pre></td></tr></table>
@@ -1005,7 +1214,12 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 通过 make 来创建
 </span><span class="c1"></span><span class="nx">dict</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">)</span>
@@ -1021,7 +1235,11 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">dict</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[[]</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{}</span>
 
@@ -1036,7 +1254,9 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">colors</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{}</span>
 <span class="nx">colors</span><span class="p">[</span><span class="s">&#34;Red&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&#34;#da1337&#34;</span></code></pre></td></tr></table>
@@ -1047,7 +1267,12 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">colors</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span>
 <span class="nx">colors</span><span class="p">[</span><span class="s">&#34;Red&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&#34;#da1337&#34;</span>
@@ -1063,11 +1288,15 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">value</span><span class="p">,</span> <span class="nx">exists</span> <span class="o">:=</span> <span class="nx">colors</span><span class="p">[</span><span class="s">&#34;Blue&#34;</span><span class="p">]</span>
 <span class="k">if</span> <span class="nx">exists</span> <span class="p">{</span>
-  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
+  <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
 <span class="p">}</span></code></pre></td></tr></table>
 </div>
 </div>
@@ -1076,11 +1305,15 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">value</span> <span class="o">:=</span> <span class="nx">colors</span><span class="p">[</span><span class="s">&#34;Blue&#34;</span><span class="p">]</span>
 <span class="k">if</span> <span class="nx">value</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
-  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
+  <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
 <span class="p">}</span></code></pre></td></tr></table>
 </div>
 </div>
@@ -1091,7 +1324,17 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1</span><span class="lnt"> 2</span><span class="lnt"> 3</span><span class="lnt"> 4</span><span class="lnt"> 5</span><span class="lnt"> 6</span><span class="lnt"> 7</span><span class="lnt"> 8</span><span class="lnt"> 9</span><span class="lnt">10</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">colors</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
     <span class="s">&#34;AliceBlue&#34;</span><span class="p">:</span>   <span class="s">&#34;#f0f8ff&#34;</span><span class="p">,</span>
@@ -1101,7 +1344,7 @@ autocomplete('#aa-search-input',
 <span class="p">}</span>
 
 <span class="k">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">colors</span> <span class="p">{</span>
-  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&#34;Key: %s  Value: %s\n&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
+  <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Key: %s  Value: %s\n&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
 <span class="p">}</span></code></pre></td></tr></table>
 </div>
 </div>
@@ -1110,12 +1353,17 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nb">delete</span><span class="p">(</span><span class="nx">colors</span><span class="p">,</span> <span class="s">&#34;Coral&#34;</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">colors</span> <span class="p">{</span><span class="err"></span>
-  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;Key: %s  Value: %s\n&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
+  <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Key: %s  Value: %s\n&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
 <span class="p">}</span></code></pre></td></tr></table>
 </div>
 </div>
@@ -1126,9 +1374,31 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1</span><span class="lnt"> 2</span><span class="lnt"> 3</span><span class="lnt"> 4</span><span class="lnt"> 5</span><span class="lnt"> 6</span><span class="lnt"> 7</span><span class="lnt"> 8</span><span class="lnt"> 9</span><span class="lnt">10</span><span class="lnt">11</span><span class="lnt">12</span><span class="lnt">13</span><span class="lnt">14</span><span class="lnt">15</span><span class="lnt">16</span><span class="lnt">17</span><span class="lnt">18</span><span class="lnt">19</span><span class="lnt">20</span><span class="lnt">21</span><span class="lnt">22</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">colors</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
      <span class="s">&#34;AliceBlue&#34;</span><span class="p">:</span>   <span class="s">&#34;#f0f8ff&#34;</span><span class="p">,</span>
      <span class="s">&#34;Coral&#34;</span><span class="p">:</span>       <span class="s">&#34;#ff7F50&#34;</span><span class="p">,</span>
@@ -1137,17 +1407,17 @@ autocomplete('#aa-search-input',
   <span class="p">}</span>
 
   <span class="k">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">colors</span> <span class="p">{</span>
-      <span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&#34;Key: %s  Value: %s\n&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
+      <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Key: %s  Value: %s\n&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
   <span class="p">}</span>
 
-  <span class="nx">removeColor</span><span class="p">(</span><span class="nx">colors</span><span class="p">,</span> <span class="s">&#34;Coral&#34;</span><span class="p">)</span>
+  <span class="nf">removeColor</span><span class="p">(</span><span class="nx">colors</span><span class="p">,</span> <span class="s">&#34;Coral&#34;</span><span class="p">)</span>
 
   <span class="k">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">colors</span> <span class="p">{</span>
-      <span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&#34;Key: %s  Value: %s\n&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
+      <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Key: %s  Value: %s\n&#34;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="nx">removeColor</span><span class="p">(</span><span class="nx">colors</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">,</span> <span class="nx">key</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">removeColor</span><span class="p">(</span><span class="nx">colors</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">,</span> <span class="nx">key</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
     <span class="nb">delete</span><span class="p">(</span><span class="nx">colors</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
 <span class="p">}</span></code></pre></td></tr></table>
 </div>
@@ -1157,7 +1427,15 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1</span><span class="lnt">2</span><span class="lnt">3</span><span class="lnt">4</span><span class="lnt">5</span><span class="lnt">6</span><span class="lnt">7</span><span class="lnt">8</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">Key</span><span class="p">:</span> <span class="nx">AliceBlue</span> <span class="nx">Value</span><span class="p">:</span> <span class="err">#</span><span class="nx">F0F8FF</span>
 <span class="nx">Key</span><span class="p">:</span> <span class="nx">Coral</span> <span class="nx">Value</span><span class="p">:</span> <span class="err">#</span><span class="nx">FF7F50</span>
@@ -1178,7 +1456,96 @@ autocomplete('#aa-search-input',
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1</span><span class="lnt"> 2</span><span class="lnt"> 3</span><span class="lnt"> 4</span><span class="lnt"> 5</span><span class="lnt"> 6</span><span class="lnt"> 7</span><span class="lnt"> 8</span><span class="lnt"> 9</span><span class="lnt">10</span><span class="lnt">11</span><span class="lnt">12</span><span class="lnt">13</span><span class="lnt">14</span><span class="lnt">15</span><span class="lnt">16</span><span class="lnt">17</span><span class="lnt">18</span><span class="lnt">19</span><span class="lnt">20</span><span class="lnt">21</span><span class="lnt">22</span><span class="lnt">23</span><span class="lnt">24</span><span class="lnt">25</span><span class="lnt">26</span><span class="lnt">27</span><span class="lnt">28</span><span class="lnt">29</span><span class="lnt">30</span><span class="lnt">31</span><span class="lnt">32</span><span class="lnt">33</span><span class="lnt">34</span><span class="lnt">35</span><span class="lnt">36</span><span class="lnt">37</span><span class="lnt">38</span><span class="lnt">39</span><span class="lnt">40</span><span class="lnt">41</span><span class="lnt">42</span><span class="lnt">43</span><span class="lnt">44</span><span class="lnt">45</span><span class="lnt">46</span><span class="lnt">47</span><span class="lnt">48</span><span class="lnt">49</span><span class="lnt">50</span><span class="lnt">51</span><span class="lnt">52</span><span class="lnt">53</span><span class="lnt">54</span><span class="lnt">55</span><span class="lnt">56</span><span class="lnt">57</span><span class="lnt">58</span><span class="lnt">59</span><span class="lnt">60</span><span class="lnt">61</span><span class="lnt">62</span><span class="lnt">63</span><span class="lnt">64</span><span class="lnt">65</span><span class="lnt">66</span><span class="lnt">67</span><span class="lnt">68</span><span class="lnt">69</span><span class="lnt">70</span><span class="lnt">71</span><span class="lnt">72</span><span class="lnt">73</span><span class="lnt">74</span><span class="lnt">75</span><span class="lnt">76</span><span class="lnt">77</span><span class="lnt">78</span><span class="lnt">79</span><span class="lnt">80</span><span class="lnt">81</span><span class="lnt">82</span><span class="lnt">83</span><span class="lnt">84</span><span class="lnt">85</span><span class="lnt">86</span><span class="lnt">87</span><span class="lnt">88</span><span class="lnt">89</span></code></pre></td>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
@@ -1192,51 +1559,51 @@ autocomplete('#aa-search-input',
   <span class="nx">sync</span><span class="p">.</span><span class="nx">RWMutex</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="nx">New</span><span class="p">()</span> <span class="o">*</span><span class="nx">Set</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">New</span><span class="p">()</span> <span class="o">*</span><span class="nx">Set</span> <span class="p">{</span>
   <span class="k">return</span> <span class="o">&amp;</span><span class="nx">Set</span><span class="p">{</span>
     <span class="nx">m</span><span class="p">:</span> <span class="kd">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">bool</span><span class="p">{},</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Set</span><span class="p">)</span> <span class="nx">Add</span><span class="p">(</span><span class="nx">item</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">s</span><span class="p">.</span><span class="nx">Lock</span><span class="p">()</span>
-  <span class="k">defer</span> <span class="nx">s</span><span class="p">.</span><span class="nx">Unlock</span><span class="p">()</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Set</span><span class="p">)</span> <span class="nf">Add</span><span class="p">(</span><span class="nx">item</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">s</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+  <span class="k">defer</span> <span class="nx">s</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
   <span class="nx">s</span><span class="p">.</span><span class="nx">m</span><span class="p">[</span><span class="nx">item</span><span class="p">]</span> <span class="p">=</span> <span class="kc">true</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Set</span><span class="p">)</span> <span class="nx">Remove</span><span class="p">(</span><span class="nx">item</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">s</span><span class="p">.</span><span class="nx">Lock</span><span class="p">()</span>
-  <span class="nx">s</span><span class="p">.</span><span class="nx">Unlock</span><span class="p">()</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Set</span><span class="p">)</span> <span class="nf">Remove</span><span class="p">(</span><span class="nx">item</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">s</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+  <span class="nx">s</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
   <span class="nb">delete</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">m</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Set</span><span class="p">)</span> <span class="nx">Has</span><span class="p">(</span><span class="nx">item</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
-  <span class="nx">s</span><span class="p">.</span><span class="nx">RLock</span><span class="p">()</span>
-  <span class="k">defer</span> <span class="nx">s</span><span class="p">.</span><span class="nx">RUnlock</span><span class="p">()</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Set</span><span class="p">)</span> <span class="nf">Has</span><span class="p">(</span><span class="nx">item</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+  <span class="nx">s</span><span class="p">.</span><span class="nf">RLock</span><span class="p">()</span>
+  <span class="k">defer</span> <span class="nx">s</span><span class="p">.</span><span class="nf">RUnlock</span><span class="p">()</span>
   <span class="nx">_</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">m</span><span class="p">[</span><span class="nx">item</span><span class="p">]</span>
   <span class="k">return</span> <span class="nx">ok</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Set</span><span class="p">)</span> <span class="nx">Len</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">List</span><span class="p">())</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Set</span><span class="p">)</span> <span class="nf">Len</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nf">List</span><span class="p">())</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Set</span><span class="p">)</span> <span class="nx">Clear</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Set</span><span class="p">)</span> <span class="nf">Clear</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">s</span><span class="p">.</span><span class="nx">Lock</span>
-  <span class="k">defer</span> <span class="nx">s</span><span class="p">.</span><span class="nx">Unlock</span><span class="p">()</span>
+  <span class="k">defer</span> <span class="nx">s</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
   <span class="nx">s</span><span class="p">.</span><span class="nx">m</span> <span class="p">=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="kt">bool</span><span class="p">{}</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Set</span><span class="p">)</span> <span class="nx">IsEmpty</span><span class="p">()</span> <span class="kt">bool</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nx">Len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Set</span><span class="p">)</span> <span class="nf">IsEmpty</span><span class="p">()</span> <span class="kt">bool</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nf">Len</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
     <span class="k">return</span> <span class="kc">true</span>
   <span class="p">}</span>
   <span class="k">return</span> <span class="kc">false</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Set</span><span class="p">)</span> <span class="nx">List</span><span class="p">()</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
-  <span class="nx">s</span><span class="p">.</span><span class="nx">RLock</span><span class="p">()</span>
-  <span class="k">defer</span> <span class="nx">s</span><span class="p">.</span><span class="nx">RUnlock</span><span class="p">()</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Set</span><span class="p">)</span> <span class="nf">List</span><span class="p">()</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
+  <span class="nx">s</span><span class="p">.</span><span class="nf">RLock</span><span class="p">()</span>
+  <span class="k">defer</span> <span class="nx">s</span><span class="p">.</span><span class="nf">RUnlock</span><span class="p">()</span>
   <span class="nx">list</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{}</span>
   <span class="k">for</span> <span class="nx">item</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">s</span><span class="p">.</span><span class="nx">m</span> <span class="p">{</span>
     <span class="nx">list</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">list</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span>
@@ -1244,30 +1611,30 @@ autocomplete('#aa-search-input',
   <span class="k">return</span> <span class="nx">list</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
   <span class="c1">// 初始化
-</span><span class="c1"></span>  <span class="nx">s</span> <span class="o">:=</span> <span class="nx">New</span><span class="p">()</span>
+</span><span class="c1"></span>  <span class="nx">s</span> <span class="o">:=</span> <span class="nf">New</span><span class="p">()</span>
   
-  <span class="nx">s</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-  <span class="nx">s</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-  <span class="nx">s</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+  <span class="nx">s</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+  <span class="nx">s</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+  <span class="nx">s</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
-  <span class="nx">s</span><span class="p">.</span><span class="nx">Clear</span><span class="p">()</span>
-  <span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nx">IsEmpty</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;0 item&#34;</span><span class="p">)</span>
+  <span class="nx">s</span><span class="p">.</span><span class="nf">Clear</span><span class="p">()</span>
+  <span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nf">IsEmpty</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;0 item&#34;</span><span class="p">)</span>
   <span class="p">}</span>
   
-  <span class="nx">s</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-  <span class="nx">s</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-  <span class="nx">s</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+  <span class="nx">s</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+  <span class="nx">s</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+  <span class="nx">s</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
   
-  <span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nx">Has</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;2 does exist&#34;</span><span class="p">)</span>
+  <span class="k">if</span> <span class="nx">s</span><span class="p">.</span><span class="nf">Has</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;2 does exist&#34;</span><span class="p">)</span>
   <span class="p">}</span>
   
-  <span class="nx">s</span><span class="p">.</span><span class="nx">Remove</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-  <span class="nx">s</span><span class="p">.</span><span class="nx">Remove</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-  <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;list of all items&#34;</span><span class="p">,</span> <span class="nx">S</span><span class="p">.</span><span class="nx">List</span><span class="p">())</span>
+  <span class="nx">s</span><span class="p">.</span><span class="nf">Remove</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+  <span class="nx">s</span><span class="p">.</span><span class="nf">Remove</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+  <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;list of all items&#34;</span><span class="p">,</span> <span class="nx">S</span><span class="p">.</span><span class="nf">List</span><span class="p">())</span>
 <span class="p">}</span></code></pre></td></tr></table>
 </div>
 </div>
@@ -1308,7 +1675,7 @@ autocomplete('#aa-search-input',
         
           <div class="disqus-comments">
             <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     

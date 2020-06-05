@@ -17,7 +17,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="髣髴兮若輕雲之蔽月" />
 
-  <meta name="generator" content="Hugo 0.32-DEV" />
+  <meta name="generator" content="Hugo 0.59.0-DEV" />
   <link rel="canonical" href="https://ariesdevil.com/post/" />
   <link rel="alternate" href="https://ariesdevil.com/post/index.xml" type="application/rss+xml" title="髣髴兮若輕雲之蔽月">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
@@ -79,12 +79,16 @@
     </div>
 </div>
 
-<script>
-window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-ga('create', 'UA-47298019-3', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-47298019-3', 'auto');
+	
+	ga('send', 'pageview');
+}
 </script>
-<script async src='//www.google-analytics.com/analytics.js'></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
 </head>
 
@@ -232,7 +236,7 @@ autocomplete('#aa-search-input',
 
               <p class="post-meta">
                 发表于 2016-11-23
-                字数 : 3652  阅读时间 : 8 分钟
+                字数 : 3745  阅读时间 : 8 分钟
               </p>
               <div class="post-entry">
                 
@@ -246,8 +250,7 @@ autocomplete('#aa-search-input',
 <br /></li>
 </ul>
 
-<p>在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。<br />
-</p>
+<p>在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。</p>
                   <a href="https://ariesdevil.com/post/methods-interfaces-and-embedded-type-in-golang/" class="post-read-more">[阅读全文]</a>
                 
               </div>
@@ -277,8 +280,7 @@ autocomplete('#aa-search-input',
                 
                   <h2 id="概述">概述</h2>
 
-<p>很多人(特别是新手)在写 Go 语言代码时经常会问一个问题，那就是一个方法的接受者类型到底应该是值类型还是指针类型呢，Go 的 wiki 上对这点做了很好的解释，我来翻译一下。<br />
-</p>
+<p>很多人(特别是新手)在写 Go 语言代码时经常会问一个问题，那就是一个方法的接受者类型到底应该是值类型还是指针类型呢，Go 的 wiki 上对这点做了很好的解释，我来翻译一下。</p>
                   <a href="https://ariesdevil.com/post/choose-whether-to-use-a-value-or-pointer-receiver-on-methods/" class="post-read-more">[阅读全文]</a>
                 
               </div>
@@ -302,7 +304,7 @@ autocomplete('#aa-search-input',
 
               <p class="post-meta">
                 发表于 2015-03-28
-                字数 : 5883  阅读时间 : 12 分钟
+                字数 : 6198  阅读时间 : 13 分钟
               </p>
               <div class="post-entry">
                 
@@ -312,8 +314,7 @@ autocomplete('#aa-search-input',
 
 <p>在 Go 语言中数组是固定长度的数据类型，它包含相同类型的连续的元素，这些元素可以是内建类型，像数字和字符串，也可以是结构类型，元素可以通过唯一的索引值访问，从 0 开始。</p>
 
-<p>数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。<br />
-</p>
+<p>数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。</p>
                   <a href="https://ariesdevil.com/post/array-slice-map-and-set-in-golang/" class="post-read-more">[阅读全文]</a>
                 
               </div>
@@ -337,7 +338,7 @@ autocomplete('#aa-search-input',
 
               <p class="post-meta">
                 发表于 2015-01-28
-                字数 : 4518  阅读时间 : 10 分钟
+                字数 : 4619  阅读时间 : 10 分钟
               </p>
               <div class="post-entry">
                 
@@ -345,9 +346,7 @@ autocomplete('#aa-search-input',
 
 <p>这两个部分的介绍是为了给那些了解 rust 基本语法，写过一些小的 demo 代码，但却不是很清楚 <code>ownership</code> 和 <code>borrowing</code> 机制的码农看的。</p>
 
-<p>我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 <code>let</code>，<code>fn</code>，<code>struct</code>，<code>trait</code> 和 <code>impl</code> 概念。<br />
-<br />
-我们的目标是学习如果写 rust 代码，而且在写的过程中不要碰到有关 <code>ownership</code> 和 <code>borrowing</code> 的墙。</p>
+<p>我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 <code>let</code>，<code>fn</code>，<code>struct</code>，<code>trait</code> 和 <code>impl</code> 概念。</p>
                   <a href="https://ariesdevil.com/post/explore-the-ownership-system-in-rust/" class="post-read-more">[阅读全文]</a>
                 
               </div>
@@ -373,14 +372,13 @@ autocomplete('#aa-search-input',
 
               <p class="post-meta">
                 发表于 2014-05-22
-                字数 : 636  阅读时间 : 2 分钟
+                字数 : 641  阅读时间 : 2 分钟
               </p>
               <div class="post-entry">
                 
                   <h2 id="概述">概述</h2>
 
-<p>Go 语言中的 <code>new</code> 和 <code>make</code> 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。<br />
-</p>
+<p>Go 语言中的 <code>new</code> 和 <code>make</code> 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。</p>
                   <a href="https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/" class="post-read-more">[阅读全文]</a>
                 
               </div>
