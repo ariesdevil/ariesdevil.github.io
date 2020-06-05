@@ -6,9 +6,6 @@
     <description>Recent content in memory management on 髣髴兮若輕雲之蔽月</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <managingEditor>yijun.zhao@outlook.com (AriesDevil)</managingEditor>
-    <webMaster>yijun.zhao@outlook.com (AriesDevil)</webMaster>
-    <copyright>All rights reserved - 2017</copyright>
     <lastBuildDate>Wed, 28 Jan 2015 15:56:22 +0800</lastBuildDate>
     
 	<atom:link href="https://ariesdevil.com/tags/memory-management/index.xml" rel="self" type="application/rss+xml" />
@@ -18,7 +15,7 @@
       <title>探索 Rust 的所有权机制(Ownership System)</title>
       <link>https://ariesdevil.com/post/explore-the-ownership-system-in-rust/</link>
       <pubDate>Wed, 28 Jan 2015 15:56:22 +0800</pubDate>
-      <author>yijun.zhao@outlook.com (AriesDevil)</author>
+      
       <guid>https://ariesdevil.com/post/explore-the-ownership-system-in-rust/</guid>
       <description>&lt;h2 id=&#34;主要内容&#34;&gt;主要内容&lt;/h2&gt;
 

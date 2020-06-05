@@ -1,280 +1,187 @@
 <!DOCTYPE html>
-<html lang="zh" itemscope itemtype="http://schema.org/WebPage">
-  <head>
-    
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>探索 Rust 的所有权机制(Ownership System) - 髣髴兮若輕雲之蔽月</title>
-  <meta name="description" content="主要内容
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
-这两个部分的介绍是为了给那些了解 rust 基本语法，写过一些小的 demo 代码，但却不是很清楚 ownership 和 borrowing 机制的码农看的。
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 
-我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 let，fn，struct，trait 和 impl 概念。">
-  <meta name="author" content="AriesDevil"/><script type="application/ld+json">
-{
-    "@context": "http://schema.org",
-    "@type": "WebSite",
-    "name": "髣髴兮若輕雲之蔽月",
-    
-    "url": "https:\/\/ariesdevil.com\/"
-}
-</script><script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "Organization",
-  "name": "",
-  "url": "https:\/\/ariesdevil.com\/"
-  
-  
-  
-  
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [{
-        "@type": "ListItem",
-        "position": 1,
-        "item": {
-          "@id": "https:\/\/ariesdevil.com\/",
-          "name": "home"
-        }
-    },{
-        "@type": "ListItem",
-        "position": 3,
-        "item": {
-          "@id": "https:\/\/ariesdevil.com\/post\/explore-the-ownership-system-in-rust\/",
-          "name": "探索 rust 的所有权机制( ownership system)"
-        }
-    }]
-}
-</script><script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "Article",
-  "author": {
-    "name" : "AriesDevil"
-  },
-  "headline": "探索 Rust 的所有权机制(Ownership System)",
-  "description" : "主要内容 这两个部分的介绍是为了给那些了解 rust 基本语法，写过一些小的 demo 代码，但却不是很清楚 ownership 和 borrowing 机制的码农看的。\n我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 let，fn，struct，trait 和 impl 概念。\n",
-  "inLanguage" : "zh",
-  "wordCount":  4619 ,
-  "datePublished" : "2015-01-28T15:56:22",
-  "dateModified" : "2015-01-28T15:56:22",
-  "image" : "https:\/\/ariesdevil.com\/",
-  "keywords" : [ "rust, memory management" ],
-  "mainEntityOfPage" : "https:\/\/ariesdevil.com\/post\/explore-the-ownership-system-in-rust\/",
-  "publisher" : {
-    "@type": "Organization",
-    "name" : "https:\/\/ariesdevil.com\/",
-    "logo" : {
-        "@type" : "ImageObject",
-        "url" : "https:\/\/ariesdevil.com\/",
-        "height" :  60 ,
-        "width" :  60
-    }
-  }
-}
-</script>
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="AriesDevil" /><meta name="description" content="主要内容 这两个部分的介绍是为了给那些了解 rust 基本语法，写过一些小的 demo 代码，但却不是很清楚 ownership 和 borrowing 机制的码农看的。
+我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 let，fn，struct，trait 和 impl 概念。
+" /><meta name="keywords" content="ownership, memory management" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.0-DEV with theme even" />
+
+
+<link rel="canonical" href="https://ariesdevil.com/post/explore-the-ownership-system-in-rust/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
 
 <meta property="og:title" content="探索 Rust 的所有权机制(Ownership System)" />
 <meta property="og:description" content="主要内容
 
 这两个部分的介绍是为了给那些了解 rust 基本语法，写过一些小的 demo 代码，但却不是很清楚 ownership 和 borrowing 机制的码农看的。
 
-我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 let，fn，struct，trait 和 impl 概念。">
+我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 let，fn，struct，trait 和 impl 概念。" />
+<meta property="og:type" content="article" />
 <meta property="og:url" content="https://ariesdevil.com/post/explore-the-ownership-system-in-rust/" />
-<meta property="og:type" content="website" />
-<meta property="og:site_name" content="髣髴兮若輕雲之蔽月" />
-
-  <meta name="twitter:title" content="探索 Rust 的所有权机制(Ownership System)" />
-  <meta name="twitter:description" content="主要内容
+<meta property="article:published_time" content="2015-01-28T15:56:22+08:00" />
+<meta property="article:modified_time" content="2015-01-28T15:56:22+08:00" />
+<meta itemprop="name" content="探索 Rust 的所有权机制(Ownership System)">
+<meta itemprop="description" content="主要内容
 
 这两个部分的介绍是为了给那些了解 rust 基本语法，写过一些小的 demo 代码，但却不是很清楚 ownership 和 borrowing 机制的码农看的。
 
 我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 let，fn，struct，trait 和 impl 概念。">
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:site" content="@ariesdevil77" />
-  <meta name="twitter:creator" content="@ariesdevil77" />
-  <link href='https://ariesdevil.com/img/favicon.ico' rel='icon' type='image/x-icon'/>
-  <meta name="generator" content="Hugo 0.59.0-DEV" />
-  <link rel="alternate" href="https://ariesdevil.com/index.xml" type="application/rss+xml" title="髣髴兮若輕雲之蔽月"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="https://ariesdevil.com/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" /><link rel="stylesheet" href="https://ariesdevil.com/css/syntax.css" /><link rel="stylesheet" href="https://ariesdevil.com/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
 
 
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-47298019-3', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
+<meta itemprop="datePublished" content="2015-01-28T15:56:22&#43;08:00" />
+<meta itemprop="dateModified" content="2015-01-28T15:56:22&#43;08:00" />
+<meta itemprop="wordCount" content="4670">
 
 
-  </head>
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
-        <span class="sr-only"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="https://ariesdevil.com/">髣髴兮若輕雲之蔽月</a>
-    </div>
 
-    <div class="collapse navbar-collapse" id="main-navbar">
-      <ul class="nav navbar-nav navbar-right">
-        
-          
-            <li>
-              <a title="categories" href="https://ariesdevil.com/categories">categories</a>
-            </li>
-          
-        
-          
-            <li>
-              <a title="tags" href="https://ariesdevil.com/tags">tags</a>
-            </li>
-          
-        
-          
-            <li>
-              <a title="About me" href="https://ariesdevil.com/about">About me</a>
-            </li>
-          
-        
+<meta itemprop="keywords" content="rust,memory management," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="探索 Rust 的所有权机制(Ownership System)"/>
+<meta name="twitter:description" content="主要内容
 
-        
+这两个部分的介绍是为了给那些了解 rust 基本语法，写过一些小的 demo 代码，但却不是很清楚 ownership 和 borrowing 机制的码农看的。
 
-        
-      </ul>
-    </div>
+我们从最简单的开始，然后一步一步逐渐复杂化，探索每一个细节。这个介绍文章假设你非常了解 let，fn，struct，trait 和 impl 概念。"/>
 
-    
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
 
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">髣髴兮若輕雲之蔽月</a>
   </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
 </nav>
-
-
-
-
-    
-
-
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-<div class="pswp__bg"></div>
-
-<div class="pswp__scroll-wrap">
-    
-    <div class="pswp__container">
-      <div class="pswp__item"></div>
-      <div class="pswp__item"></div>
-      <div class="pswp__item"></div>
-    </div>
-    
-    <div class="pswp__ui pswp__ui--hidden">
-    <div class="pswp__top-bar">
-      
-      <div class="pswp__counter"></div>
-      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-      <button class="pswp__button pswp__button--share" title="Share"></button>
-      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-      
-      
-      <div class="pswp__preloader">
-        <div class="pswp__preloader__icn">
-          <div class="pswp__preloader__cut">
-            <div class="pswp__preloader__donut"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-      <div class="pswp__share-tooltip"></div>
-    </div>
-    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-    </button>
-    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-    </button>
-    <div class="pswp__caption">
-      <div class="pswp__caption__center"></div>
-    </div>
-    </div>
-    </div>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">髣髴兮若輕雲之蔽月</a>
 </div>
 
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
 
-  
-  
-  
-
-
-
-
-
-
-  
-
-  <header class="header-section ">
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
     
-    <div class="intro-header no-img">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="post-heading">
-              
-                <h1>探索 Rust 的所有权机制(Ownership System)</h1>
-              
-              
-              
-              
-                <span class="post-meta">
-  
-  
-  <i class="fas fa-calendar"></i>&nbsp;
-  
-  
-  
-  
-    
-      &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;AriesDevil
-    
-  
-  
-</span>
+    <header class="post-header">
+      <h1 class="post-title">探索 Rust 的所有权机制(Ownership System)</h1>
 
-
-              
+      <div class="post-meta">
+        <span class="post-time"> 2015-01-28 </span>
+        <div class="post-category">
+            <a href="/categories/programming-language/"> Programming Language </a>
             </div>
-          </div>
-        </div>
+        
       </div>
-    </div>
-  </header>
+    </header>
 
-
-    
-<div class="container" role="main">
-  <div class="row">
-    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-      <article role="main" class="blog-post">
-        <h2 id="主要内容">主要内容</h2>
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#主要内容">主要内容</a></li>
+<li><a href="#先决条件-你应该预先知道的">先决条件 &ndash; 你应该预先知道的</a></li>
+<li><a href="#copy-trait">Copy Trait</a></li>
+<li><a href="#所有权-ownership">所有权(Ownership)</a>
+<ul>
+<li><a href="#向-bob-问好-我们的人体模型结构体">向 Bob 问好，我们的人体模型结构体。。。</a></li>
+<li><a href="#来测试一下">来测试一下</a></li>
+<li><a href="#销毁它-除非它移动了">销毁它，除非它移动了</a></li>
+<li><a href="#没有魔法-只是规则而已">没有魔法 &ndash; 只是规则而已</a></li>
+</ul></li>
+<li><a href="#所有权-可变性">所有权（可变性）</a>
+<ul>
+<li><a href="#替换-mut-修饰的值">替换 mut 修饰的值</a></li>
+<li><a href="#所有权-可变-规则">所有权(可变)规则</a></li>
+</ul></li>
+<li><a href="#所有权系统的威力">所有权系统的威力</a>
+<ul>
+<li><a href="#内存分配">内存分配</a></li>
+</ul></li>
+<li><a href="#垃圾回收">垃圾回收</a></li>
+<li><a href="#并发">并发</a></li>
+<li><a href="#还有啥">还有啥？</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="主要内容">主要内容</h2>
 
 <p>这两个部分的介绍是为了给那些了解 rust 基本语法，写过一些小的 demo 代码，但却不是很清楚 <code>ownership</code> 和 <code>borrowing</code> 机制的码农看的。</p>
 
@@ -285,15 +192,14 @@ if (!doNotTrack) {
 <p>首先是 <em>ownership</em> 部分：</p>
 
 <ul>
-<li>在简单介绍之后<br /></li>
-<li>学习 <code>Copy Traits</code>，然后<br /></li>
-<li>学习 不可变(<code>Immutable</code>)<br /></li>
-<li>和 可变(<code>Mutable</code>) 所有权规则<br /></li>
-<li>然后介绍一下所有权系统的强大之处<br /></li>
-<li>体现在内存管理方面<br /></li>
-<li>垃圾回收方面<br /></li>
-<li>以及并发方面<br />
-<br /></li>
+<li>在简单介绍之后</li>
+<li>学习 <code>Copy Traits</code>，然后</li>
+<li>学习 不可变(<code>Immutable</code>)</li>
+<li>和 可变(<code>Mutable</code>) 所有权规则</li>
+<li>然后介绍一下所有权系统的强大之处</li>
+<li>体现在内存管理方面</li>
+<li>垃圾回收方面</li>
+<li>以及并发方面</li>
 </ul>
 
 <h2 id="先决条件-你应该预先知道的">先决条件 &ndash; 你应该预先知道的</h2>
@@ -348,14 +254,14 @@ if (!doNotTrack) {
 
 <p>在 Rust 中，就像在 C艹 中(或者其他的语言)，可以使用你的自定义类型来替代 Int。值将会被分配在当前栈，然后在离开作用域的时候被释放。</p>
 
-<p>然而，Rust 编译器使用了不同的所有权规则，除非类型实现了 <code>Copy</code> 特质。<br />
+<p>然而，Rust 编译器使用了不同的所有权规则，除非类型实现了 <code>Copy</code> 特质。
 因此，我们先来讨论一下 <code>Copy</code> 特质，看看它是如何工作的。</p>
 
 <h2 id="copy-trait">Copy Trait</h2>
 
 <p><code>Copy</code> 特质使类型的行为有了同样的方式：它每次赋值或者用作函数参数的时候，内存空间地址会被完整拷贝到另一个内存地址。实现这个特质允许你像使用内建 integer 一样使用你自定义类型。</p>
 
-<p>内建的类型 <code>i64</code>(一种类型的 integer) 实现了这个特质，还有<a href="http://doc.rust-lang.org/std/marker/trait.Copy.html" target="_blank">很多类型</a>都实现了它。</p>
+<p>内建的类型 <code>i64</code>(一种类型的 integer) 实现了这个特质，还有<a href="http://doc.rust-lang.org/std/marker/trait.Copy.html">很多类型</a>都实现了它。</p>
 
 <p>如果我们有一个 <code>Info</code> 结构体，我们可以通过实现 <code>Copy</code> 特质来让它可拷贝。</p>
 
@@ -500,11 +406,16 @@ if (!doNotTrack) {
 </span></code></pre></td></tr></table>
 </div>
 </div>
-
-<pre><code>new bob &quot;A&quot;
-del bob &quot;A&quot;
-</code></pre>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">new bob &#34;A&#34;
+del bob &#34;A&#34;</pre></td></tr></table>
+</div>
+</div>
 <p>好的，bob 挂了，但是啥时候挂的？</p>
 
 <p>让我们在函数结尾插入一个 &ldquo;print&rdquo; 语句：</p>
@@ -524,12 +435,18 @@ del bob &quot;A&quot;
 </span></code></pre></td></tr></table>
 </div>
 </div>
-
-<pre><code>new bob &quot;A&quot;
-del bob &quot;A&quot;
-end is near
-</code></pre>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">new bob &#34;A&#34;
+del bob &#34;A&#34;
+end is near</pre></td></tr></table>
+</div>
+</div>
 <p>他在函数<strong>结束前</strong>就已经挂了。返回值并没有被赋值给任何东西，所以编译器调用了 <code>drop</code> 来在他创建的地方销毁他。</p>
 
 <p>如果我们绑定返回值给一个变量呢？</p>
@@ -549,12 +466,18 @@ end is near
 </span></code></pre></td></tr></table>
 </div>
 </div>
-
-<pre><code>new bob &quot;A&quot;
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">new bob &#34;A&#34;
 end is near
-del bob &quot;A&quot;
-</code></pre>
-
+del bob &#34;A&#34;</pre></td></tr></table>
+</div>
+</div>
 <p>有了 <code>let</code> 绑定，他在函数结束时才会挂，也就是在离开作用域时。所以，编译器<strong>在作用域结束时销毁绑定值</strong>。</p>
 
 <h3 id="销毁它-除非它移动了">销毁它，除非它移动了</h3>
@@ -590,14 +513,21 @@ del bob &quot;A&quot;
 </span></code></pre></td></tr></table>
 </div>
 </div>
-
-<pre><code>new bob &quot;A&quot;
-imminent shrikage bob &quot;A&quot;
-del bob &quot;A&quot;
-end is near
-</code></pre>
-
-<p><a href="http://dwz.cn/APyM7" target="_blank">自己试一下</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">new bob &#34;A&#34;
+imminent shrikage bob &#34;A&#34;
+del bob &#34;A&#34;
+end is near</pre></td></tr></table>
+</div>
+</div>
+<p><a href="http://dwz.cn/APyM7">自己试一下</a></p>
 
 <p>bob 在 black_hole 函数里挂了，而不是在 <code>main</code> 函数的结尾!</p>
 
@@ -620,15 +550,24 @@ end is near
 </span></code></pre></td></tr></table>
 </div>
 </div>
-
-<pre><code>&lt;anon&gt;:35:16: 35:19 error: use of moved value: `bob`
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">&lt;anon&gt;:35:16: 35:19 error: use of moved value: `bob`
 &lt;anon&gt;:35     black_hole(bob);
                          ^~~
 &lt;anon&gt;:34:16: 34:19 note: `bob` moved here because it has type `Bob`, which is non-copyable
 &lt;anon&gt;:34     black_hole(bob);
-                         ^~~
-</code></pre>
-
+                         ^~~</pre></td></tr></table>
+</div>
+</div>
 <p>编译器告诉我们不可以使用已经移动的值，而且做了详细的解释。</p>
 
 <h3 id="没有魔法-只是规则而已">没有魔法 &ndash; 只是规则而已</h3>
@@ -638,9 +577,8 @@ end is near
 <p>如果你知道规则，你也可以简单的做到这些。到目前为止，我们知道了一些规则：</p>
 
 <ul>
-<li><strong>没有使用的返回值会被销毁</strong><br /></li>
-<li><strong>所有被绑定到 <code>let</code> 的值都会在函数结尾处被销毁，除非它被移动了</strong><br />
-<br /></li>
+<li><strong>没有使用的返回值会被销毁</strong></li>
+<li><strong>所有被绑定到 <code>let</code> 的值都会在函数结尾处被销毁，除非它被移动了</strong></li>
 </ul>
 
 <p>现在我们知道了，内存安全实际是基于一个值只能有一个所有者。</p>
@@ -666,11 +604,16 @@ end is near
 </span></code></pre></td></tr></table>
 </div>
 </div>
-
-<pre><code>new bob &quot;A&quot;
-del bob &quot;mutant&quot;
-</code></pre>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">new bob &#34;A&#34;
+del bob &#34;mutant&#34;</pre></td></tr></table>
+</div>
+</div>
 <p>我们以名字 “A” 创建了他，但是以名字 “mutant” 销毁了他。</p>
 
 <p>如果我们把这个值传给另一个函数 <code>mutate</code>，我们同样可以把它赋值给 <code>mut</code> 修饰的变量：</p>
@@ -698,11 +641,16 @@ del bob &quot;mutant&quot;
 </span></code></pre></td></tr></table>
 </div>
 </div>
-
-<pre><code>new bob &quot;A&quot;
-del bob &quot;mutant&quot;
-</code></pre>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">new bob &#34;A&#34;
+del bob &#34;mutant&#34;</pre></td></tr></table>
+</div>
+</div>
 <p>所以，可以在任意时刻改变可变类型的值。</p>
 
 <p>一些需要了解的知识点：函数参数也可以变成用 mut 修饰的，因为它也是用于绑定的关键字，就像 let 一样。所以上面的例子可以被改写成：</p>
@@ -752,22 +700,38 @@ del bob &quot;mutant&quot;
 </span></code></pre></td></tr></table>
 </div>
 </div>
-
-<pre><code>new bob &quot;A&quot;
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">new bob &#34;A&#34;
 
 before overwrite
-new bob &quot;B&quot;
-del bob &quot;A&quot;
+new bob &#34;B&#34;
+del bob &#34;A&#34;
 after overwrite
 
 before overwrite
-new bob &quot;C&quot;
-del bob &quot;B&quot;
+new bob &#34;C&#34;
+del bob &#34;B&#34;
 after overwrite
 
-del bob &quot;C&quot;
-</code></pre>
-
+del bob &#34;C&#34;</pre></td></tr></table>
+</div>
+</div>
 <p>旧的值被销毁了。新的赋值会在作用域结尾处被销毁 &ndash; 除非它被移动了或者是被再次重写。</p>
 
 <h3 id="所有权-可变-规则">所有权(可变)规则</h3>
@@ -775,10 +739,9 @@ del bob &quot;C&quot;
 <p>相对于不可变性，可变性只有一条附加规则：</p>
 
 <ul>
-<li>没有使用的返回值会被销毁<br /></li>
-<li>所有被绑定到 <code>let</code> 的值都会在函数结尾处被销毁，除非它被移动了<br /></li>
-<li><strong>被替换的值将被销毁</strong><br />
-<br /></li>
+<li>没有使用的返回值会被销毁</li>
+<li>所有被绑定到 <code>let</code> 的值都会在函数结尾处被销毁，除非它被移动了</li>
+<li><strong>被替换的值将被销毁</strong></li>
 </ul>
 
 <p>很明显了，在 Rust 中，我们可以确定一个值没有所有者或者被引用。</p>
@@ -816,11 +779,16 @@ del bob &quot;C&quot;
 </span></code></pre></td></tr></table>
 </div>
 </div>
-
-<pre><code>new bob A
-del bob A
-</code></pre>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">new bob A
+del bob A</pre></td></tr></table>
+</div>
+</div>
 <p><code>bob</code> 的返回值类型是 <code>Box&lt;Bob&gt;</code>。泛型类型使 <code>Bob</code> 的生命周期被 <code>Box&lt;Bob&gt;</code> 管理，同时当 <code>Box</code> 被删除时它也被随之删除。</p>
 
 <p><code>Box</code> 是不可拷贝的，其所有权机制跟上面提到的一样。当它在栈上的生命周期结束时，它的析构方法 <code>drop</code> 被调用，随后立即调用 <code>Bob</code> 的析构方法 <code>drop</code>，同样会清理堆上的内存。</p>
@@ -851,7 +819,7 @@ del bob A
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">rc</span>::<span class="n">Rc</span><span class="p">;</span><span class="w">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">Rc</span><span class="p">;</span><span class="w">
 </span><span class="w">
 </span><span class="w"></span><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">bob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Rc</span>::<span class="n">new</span><span class="p">(</span><span class="n">Bob</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;A&#34;</span><span class="p">));</span><span class="w">
@@ -860,13 +828,19 @@ del bob A
 </span></code></pre></td></tr></table>
 </div>
 </div>
-
-<pre><code>new bob A
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">new bob A
 Rc(bob A)
-del bob A
-</code></pre>
-
-<p><a href="http://dwz.cn/APyxG" target="_blank">自己试一下</a></p>
+del bob A</pre></td></tr></table>
+</div>
+</div>
+<p><a href="http://dwz.cn/APyxG">自己试一下</a></p>
 
 <p>我们可以改变 <code>black_hole</code> 函数来接受一个 <code>Rc&lt;Bob&gt;</code> 然后检查是否被销毁。但是我们可以更简单的让它接受<strong>任意类型</strong>的 <code>T</code> 然后实现 <code>Show</code> 特质来方便打印。让我们来让它泛型话：</p>
 
@@ -905,14 +879,21 @@ del bob A
 </span></code></pre></td></tr></table>
 </div>
 </div>
-
-<pre><code>new bob A
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">new bob A
 imminent shrinkage Rc(bob A)
 Rc(bob A)
-del bob A
-</code></pre>
-
-<p><a href="http://dwz.cn/APxTk" target="_blank">自己试一下</a></p>
+del bob A</pre></td></tr></table>
+</div>
+</div>
+<p><a href="http://dwz.cn/APxTk">自己试一下</a></p>
 
 <p>它在 black_hole 里存活了下来！不过它是怎么工作的？</p>
 
@@ -947,15 +928,21 @@ del bob A
 </span></code></pre></td></tr></table>
 </div>
 </div>
-
-<pre><code>new bob A
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">new bob A
 Rc(RefCell { value: bob mutant })
-del bob mutant
-</code></pre>
-
+del bob mutant</pre></td></tr></table>
+</div>
+</div>
 <p>这个例子证明了不同的低级别工具是如何以最小的代价来组合实现精确的垃圾回收。</p>
 
-<p>举个栗子，<code>Rc</code> 只能被使用在同一线程中。不过另外一个类型 <code>Arc</code> 可以被不同线程使用。一个可变的 <code>Rc</code> 可能会被多个对象互相引用。不过，<code>Rc</code> 可以被克隆成弱引用(<code>Weak</code>) ，这样就不会参与引用计数了。更多的信息请查看<a href="http://doc.rust-lang.org/std/rc/" target="_blank">官方文档</a>。</p>
+<p>举个栗子，<code>Rc</code> 只能被使用在同一线程中。不过另外一个类型 <code>Arc</code> 可以被不同线程使用。一个可变的 <code>Rc</code> 可能会被多个对象互相引用。不过，<code>Rc</code> 可以被克隆成弱引用(<code>Weak</code>) ，这样就不会参与引用计数了。更多的信息请查看<a href="http://doc.rust-lang.org/std/rc/">官方文档</a>。</p>
 
 <p>最重要的是，更多高级的垃圾回收机制可以(即将)被实现，而且都是使用库的形式。</p>
 
@@ -979,7 +966,7 @@ del bob mutant
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">thread</span>::<span class="n">Thread</span><span class="w">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">Thread</span><span class="w">
 </span><span class="w">
 </span><span class="w"></span><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">bob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Bob</span>::<span class="n">new</span><span class="p">(</span><span class="s">&#34;A&#34;</span><span class="p">);</span><span class="w">
@@ -992,14 +979,21 @@ del bob mutant
 </span></code></pre></td></tr></table>
 </div>
 </div>
-
-<pre><code>new bob A
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">new bob A
 waiting for thread to end
 From thread, bob A and 12i64
-del bob A
-</code></pre>
-
-<p><a href="http://dwz.cn/APyoQ" target="_blank">自己试一下</a></p>
+del bob A</pre></td></tr></table>
+</div>
+</div>
+<p><a href="http://dwz.cn/APyoQ">自己试一下</a></p>
 
 <p>发生了什么？首先，我们创建了两个值：<code>bob</code> 和 <code>i</code>。然后我们通过 <code>Thread::scoped</code> 创建了一个新的线程并且传入一个闭包让它执行。闭包捕获了我们的两个值。</p>
 
@@ -1009,7 +1003,7 @@ del bob A
 
 <p>你可能会指出这跟你之前使用线程没啥区别 &ndash; 我们大家都知道如果没有某些同步机制是不可以随便在不同线程之间共享内存地址的。Rust 的不同之处在于它在编译期就强制了这一点。</p>
 
-<p>当然，我们能获取到 <code>guard</code> 的返回值，也可以创建一个管道在不同线程中来发送和接受值。更多的信息请查看官方<a href="http://doc.rust-lang.org/std/thread/" target="_blank">线程文档</a>，<a href="http://doc.rust-lang.org/std/sync/mpsc/" target="_blank">管道文档</a>，和<a href="http://doc.rust-lang.org/book/threads.html" target="_blank">这本书</a>。</p>
+<p>当然，我们能获取到 <code>guard</code> 的返回值，也可以创建一个管道在不同线程中来发送和接受值。更多的信息请查看官方<a href="http://doc.rust-lang.org/std/thread/">线程文档</a>，<a href="http://doc.rust-lang.org/std/sync/mpsc/">管道文档</a>，和<a href="http://doc.rust-lang.org/book/threads.html">这本书</a>。</p>
 
 <h2 id="还有啥">还有啥？</h2>
 
@@ -1019,156 +1013,138 @@ del bob A
 
 <p>在这个系列的第二部分中我们将学习为什么借用机制很有用，已经怎么最好的使用它。</p>
 
-<p>原文地址：<a href="http://nercury.github.io/rust/guide/2015/01/19/ownership.html" target="_blank">http://nercury.github.io/rust/guide/2015/01/19/ownership.html</a></p>
-
-        
-          <div class="blog-tags">
-            
-              <a href="https://ariesdevil.com//tags/rust/">rust</a>&nbsp;
-            
-              <a href="https://ariesdevil.com//tags/memory-management/">memory management</a>&nbsp;
-            
-          </div>
-        
-
-        
-
-        
-      </article>
-
-      
-        <ul class="pager blog-pager">
-          
-            <li class="previous">
-              <a href="https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/" data-toggle="tooltip" data-placement="top" title="Go 语言中的 new() 和 make() 的区别">&larr; </a>
-            </li>
-          
-          
-            <li class="next">
-              <a href="https://ariesdevil.com/post/array-slice-map-and-set-in-golang/" data-toggle="tooltip" data-placement="top" title="Go 语言中的 Array，Slice，Map 和 Set"> &rarr;</a>
-            </li>
-          
-        </ul>
-      
-
-
-      
-        
-          
-          <div class="disqus-comments">
-            <div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "ariesdevil" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-          </div>
-          
-        
-        
-      
-
+<p>原文地址：<a href="http://nercury.github.io/rust/guide/2015/01/19/ownership.html">http://nercury.github.io/rust/guide/2015/01/19/ownership.html</a></p>
     </div>
-  </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">AriesDevil</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2015-01-28
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/rust/">rust</a>
+          <a href="/tags/memory-management/">memory management</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/array-slice-map-and-set-in-golang/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go 语言中的 Array，Slice，Map 和 Set</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/the-difference-between-function-new-and-make-in-golang/">
+            <span class="next-text nav-default">Go 语言中的 new() 和 make() 的区别</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'ariesdevil';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:se77en.cc@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://twitter.com/ariesdevil77" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/ariesdevil" class="iconfont icon-github" title="github"></a>
+      <a href="https://douban.com/people/su" class="iconfont icon-douban" title="douban"></a>
+  <a href="https://ariesdevil.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
 </div>
 
-      
-<footer>
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-        <ul class="list-inline text-center footer-links">
-          
-              <li>
-                <a href="mailto:yijun.zhao@outlook.com" title="Email me">
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a href="https://github.com/ariesdevil" title="GitHub">
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a href="https://twitter.com/ariesdevil77" title="Twitter">
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a href="https://linkedin.com/in/ariesdevil" title="LinkedIn">
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-          
-        </ul>
-        <p class="credits copyright text-muted">
-          
-            
-              AriesDevil
-            
-          
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
 
-          &nbsp;&bull;&nbsp;&copy;
-          
-            2017
-          
+  
 
-          
-            &nbsp;&bull;&nbsp;
-            <a href="https://ariesdevil.com/">髣髴兮若輕雲之蔽月</a>
-          
-        </p>
-        
-        <p class="credits theme-by text-muted">
-          
-          
-        </p>
-      </div>
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">AriesDevil</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
     </div>
   </div>
-</footer><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-<script src="https://ariesdevil.com/js/main.js"></script><script> renderMathInElement(document.body); </script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="https://ariesdevil.com/js/load-photoswipe.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
 
 
 
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-47298019-3', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
 
 
 
 
 
-    
-  </body>
+
+</body>
 </html>
-

@@ -1,75 +1,102 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<?xml-stylesheet type="text/xsl" href="https://ariesdevil.com/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
     <loc>https://ariesdevil.com/about/</loc>
     <lastmod>2017-11-20T20:49:53+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://ariesdevil.com/</loc>
     <lastmod>2017-11-20T20:49:53+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://ariesdevil.com/categories/</loc>
     <lastmod>2016-11-23T14:06:35+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://ariesdevil.com/post/methods-interfaces-and-embedded-type-in-golang/</loc>
     <lastmod>2016-11-23T14:06:35+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://ariesdevil.com/tags/golang/</loc>
     <lastmod>2016-11-23T14:06:35+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://ariesdevil.com/post/</loc>
     <lastmod>2016-11-23T14:06:35+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://ariesdevil.com/categories/programming-language/</loc>
     <lastmod>2016-11-23T14:06:35+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://ariesdevil.com/tags/</loc>
     <lastmod>2016-11-23T14:06:35+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://ariesdevil.com/post/choose-whether-to-use-a-value-or-pointer-receiver-on-methods/</loc>
     <lastmod>2015-11-23T14:06:35+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://ariesdevil.com/post/array-slice-map-and-set-in-golang/</loc>
     <lastmod>2015-03-28T18:16:37+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://ariesdevil.com/tags/memory-management/</loc>
     <lastmod>2015-01-28T15:56:22+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://ariesdevil.com/tags/rust/</loc>
     <lastmod>2015-01-28T15:56:22+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://ariesdevil.com/post/explore-the-ownership-system-in-rust/</loc>
     <lastmod>2015-01-28T15:56:22+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/</loc>
     <lastmod>2014-06-01T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
 </urlset>

@@ -6,9 +6,6 @@
     <description>Recent content on 髣髴兮若輕雲之蔽月</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <managingEditor>yijun.zhao@outlook.com (AriesDevil)</managingEditor>
-    <webMaster>yijun.zhao@outlook.com (AriesDevil)</webMaster>
-    <copyright>All rights reserved - 2017</copyright>
     <lastBuildDate>Mon, 20 Nov 2017 20:49:53 +0800</lastBuildDate>
     
 	<atom:link href="https://ariesdevil.com/index.xml" rel="self" type="application/rss+xml" />
@@ -18,7 +15,7 @@
       <title>About</title>
       <link>https://ariesdevil.com/about/</link>
       <pubDate>Mon, 20 Nov 2017 20:49:53 +0800</pubDate>
-      <author>yijun.zhao@outlook.com (AriesDevil)</author>
+      
       <guid>https://ariesdevil.com/about/</guid>
       <description>About Meeeeeee&amp;hellip;&amp;hellip;. 呵呵哒🙄</description>
     </item>
@@ -27,16 +24,15 @@
       <title>Go 语言中的方法，接口和嵌入类型</title>
       <link>https://ariesdevil.com/post/methods-interfaces-and-embedded-type-in-golang/</link>
       <pubDate>Wed, 23 Nov 2016 14:06:35 +0800</pubDate>
-      <author>yijun.zhao@outlook.com (AriesDevil)</author>
+      
       <guid>https://ariesdevil.com/post/methods-interfaces-and-embedded-type-in-golang/</guid>
       <description>&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
 
 &lt;p&gt;在 Go 语言中，如果一个结构体和一个嵌入字段同时实现了相同的接口会发生什么呢？我们猜一下，可能有两个问题：&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;编译器会因为我们同时有两个接口实现而报错吗？&lt;br /&gt;&lt;/li&gt;
-&lt;li&gt;如果编译器接受这样的定义，那么当接口调用时编译器要怎么确定该使用哪个实现？&lt;br /&gt;
-&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;编译器会因为我们同时有两个接口实现而报错吗？&lt;/li&gt;
+&lt;li&gt;如果编译器接受这样的定义，那么当接口调用时编译器要怎么确定该使用哪个实现？&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。&lt;/p&gt;</description>
@@ -46,7 +42,7 @@
       <title>Go 语言方法接受者类型的选择</title>
       <link>https://ariesdevil.com/post/choose-whether-to-use-a-value-or-pointer-receiver-on-methods/</link>
       <pubDate>Mon, 23 Nov 2015 14:06:35 +0800</pubDate>
-      <author>yijun.zhao@outlook.com (AriesDevil)</author>
+      
       <guid>https://ariesdevil.com/post/choose-whether-to-use-a-value-or-pointer-receiver-on-methods/</guid>
       <description>&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
 
@@ -57,7 +53,7 @@
       <title>Go 语言中的 Array，Slice，Map 和 Set</title>
       <link>https://ariesdevil.com/post/array-slice-map-and-set-in-golang/</link>
       <pubDate>Sat, 28 Mar 2015 18:16:37 +0800</pubDate>
-      <author>yijun.zhao@outlook.com (AriesDevil)</author>
+      
       <guid>https://ariesdevil.com/post/array-slice-map-and-set-in-golang/</guid>
       <description>&lt;h2 id=&#34;array-数组&#34;&gt;Array(数组)&lt;/h2&gt;
 
@@ -72,7 +68,7 @@
       <title>探索 Rust 的所有权机制(Ownership System)</title>
       <link>https://ariesdevil.com/post/explore-the-ownership-system-in-rust/</link>
       <pubDate>Wed, 28 Jan 2015 15:56:22 +0800</pubDate>
-      <author>yijun.zhao@outlook.com (AriesDevil)</author>
+      
       <guid>https://ariesdevil.com/post/explore-the-ownership-system-in-rust/</guid>
       <description>&lt;h2 id=&#34;主要内容&#34;&gt;主要内容&lt;/h2&gt;
 
@@ -85,7 +81,7 @@
       <title>Go 语言中的 new() 和 make() 的区别</title>
       <link>https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/</link>
       <pubDate>Thu, 22 May 2014 15:56:22 +0800</pubDate>
-      <author>yijun.zhao@outlook.com (AriesDevil)</author>
+      
       <guid>https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/</guid>
       <description>&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
 
