@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>golang on 髣髴兮若輕雲之蔽月</title>
@@ -6,11 +6,7 @@
     <description>Recent content in golang on 髣髴兮若輕雲之蔽月</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 23 Nov 2016 14:06:35 +0800</lastBuildDate>
-    
-	<atom:link href="https://ariesdevil.com/tags/golang/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 23 Nov 2016 14:06:35 +0800</lastBuildDate><atom:link href="https://ariesdevil.com/tags/golang/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Go 语言中的方法，接口和嵌入类型</title>
       <link>https://ariesdevil.com/post/methods-interfaces-and-embedded-type-in-golang/</link>
@@ -18,14 +14,11 @@
       
       <guid>https://ariesdevil.com/post/methods-interfaces-and-embedded-type-in-golang/</guid>
       <description>&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
-
 &lt;p&gt;在 Go 语言中，如果一个结构体和一个嵌入字段同时实现了相同的接口会发生什么呢？我们猜一下，可能有两个问题：&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;编译器会因为我们同时有两个接口实现而报错吗？&lt;/li&gt;
 &lt;li&gt;如果编译器接受这样的定义，那么当接口调用时编译器要怎么确定该使用哪个实现？&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;在写了一些测试代码并认真深入的读了一下标准之后，我发现了一些有意思的东西，而且觉得很有必要分享出来，那么让我们先从 Go 语言中的方法开始说起。&lt;/p&gt;</description>
     </item>
     
@@ -36,7 +29,6 @@
       
       <guid>https://ariesdevil.com/post/choose-whether-to-use-a-value-or-pointer-receiver-on-methods/</guid>
       <description>&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
-
 &lt;p&gt;很多人(特别是新手)在写 Go 语言代码时经常会问一个问题，那就是一个方法的接受者类型到底应该是值类型还是指针类型呢，Go 的 wiki 上对这点做了很好的解释，我来翻译一下。&lt;/p&gt;</description>
     </item>
     
@@ -46,12 +38,9 @@
       <pubDate>Sat, 28 Mar 2015 18:16:37 +0800</pubDate>
       
       <guid>https://ariesdevil.com/post/array-slice-map-and-set-in-golang/</guid>
-      <description>&lt;h2 id=&#34;array-数组&#34;&gt;Array(数组)&lt;/h2&gt;
-
+      <description>&lt;h2 id=&#34;array数组&#34;&gt;Array(数组)&lt;/h2&gt;
 &lt;h3 id=&#34;内部机制&#34;&gt;内部机制&lt;/h3&gt;
-
 &lt;p&gt;在 Go 语言中数组是固定长度的数据类型，它包含相同类型的连续的元素，这些元素可以是内建类型，像数字和字符串，也可以是结构类型，元素可以通过唯一的索引值访问，从 0 开始。&lt;/p&gt;
-
 &lt;p&gt;数组是很有价值的数据结构，因为它的内存分配是连续的，内存连续意味着可是让它在 CPU 缓存中待更久，所以迭代数组和移动元素都会非常迅速。&lt;/p&gt;</description>
     </item>
     
@@ -62,7 +51,6 @@
       
       <guid>https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/</guid>
       <description>&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
-
 &lt;p&gt;Go 语言中的 &lt;code&gt;new&lt;/code&gt; 和 &lt;code&gt;make&lt;/code&gt; 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。&lt;/p&gt;</description>
     </item>
     

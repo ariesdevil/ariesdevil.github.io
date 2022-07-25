@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on 髣髴兮若輕雲之蔽月</title>
@@ -6,11 +6,7 @@
     <description>Recent content in Tags on 髣髴兮若輕雲之蔽月</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 23 Nov 2016 14:06:35 +0800</lastBuildDate>
-    
-	<atom:link href="https://ariesdevil.com/tags/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 23 Nov 2016 14:06:35 +0800</lastBuildDate><atom:link href="https://ariesdevil.com/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>golang</title>
       <link>https://ariesdevil.com/tags/golang/</link>

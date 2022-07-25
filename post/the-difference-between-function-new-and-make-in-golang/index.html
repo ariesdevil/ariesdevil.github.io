@@ -1,70 +1,81 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Go 语言中的 new() 和 make() 的区别 - 髣髴兮若輕雲之蔽月</title>
-  <meta name="renderer" content="webkit" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
 
 <meta name="theme-color" content="#f8f5ec" />
 <meta name="msapplication-navbutton-color" content="#f8f5ec">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
+<meta name="mobile-web-app-capable" content="yes">
 
-<meta name="author" content="AriesDevil" /><meta name="description" content="概述 Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。
-" /><meta name="keywords" content="new, make" />
+<meta name="author" content="AriesDevil" />
+  <meta name="description" content="概述 Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。
+" />
+<meta name="keywords" content="new, make" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.59.0-DEV with theme even" />
+
+<meta name="generator" content="Hugo 0.101.0" />
 
 
 <link rel="canonical" href="https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
 
-<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/sass/jane.min.fa4b2b9f31b5c6d0b683db81157a9226e17b06e61911791ab547242a4a0556f2.css" integrity="sha256-&#43;ksrnzG1xtC2g9uBFXqSJuF7BuYZEXkatUckKkoFVvI=" media="screen" crossorigin="anonymous">
+
+
+
 
 
 <meta property="og:title" content="Go 语言中的 new() 和 make() 的区别" />
 <meta property="og:description" content="概述
-
 Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/" />
+<meta property="og:url" content="https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2014-05-22T15:56:22+08:00" />
 <meta property="article:modified_time" content="2014-06-01T00:00:00+00:00" />
+
 <meta itemprop="name" content="Go 语言中的 new() 和 make() 的区别">
 <meta itemprop="description" content="概述
-
-Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。">
-
-
-<meta itemprop="datePublished" content="2014-05-22T15:56:22&#43;08:00" />
-<meta itemprop="dateModified" content="2014-06-01T00:00:00&#43;00:00" />
+Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。"><meta itemprop="datePublished" content="2014-05-22T15:56:22+08:00" />
+<meta itemprop="dateModified" content="2014-06-01T00:00:00+00:00" />
 <meta itemprop="wordCount" content="648">
-
-
-
-<meta itemprop="keywords" content="golang," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="golang," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go 语言中的 new() 和 make() 的区别"/>
 <meta name="twitter:description" content="概述
-
 Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。"/>
 
 <!--[if lte IE 9]>
@@ -75,6 +86,20 @@ Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一
   <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
 <![endif]-->
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-47298019-3', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
 
 </head>
 <body>
@@ -90,100 +115,180 @@ Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一
 </div>
 <nav id="mobile-menu" class="mobile-menu slideout-menu">
   <ul class="mobile-menu-list">
-    <a href="/">
-        <li class="mobile-menu-item">Home</li>
-      </a><a href="/post/">
-        <li class="mobile-menu-item">Archives</li>
-      </a><a href="/tags/">
-        <li class="mobile-menu-item">Tags</li>
-      </a><a href="/categories/">
-        <li class="mobile-menu-item">Categories</li>
-      </a>
+    <li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://ariesdevil.com/">Home</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://ariesdevil.com/post/">Archives</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://ariesdevil.com/tags/">Tags</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://ariesdevil.com/categories/">Categories</a>
+          
+        
+      </li>
+    
+
+    
   </ul>
 </nav>
-  <div class="container" id="mobile-panel">
-    <header id="header" class="header">
-        <div class="logo-wrapper">
-  <a href="/" class="logo">髣髴兮若輕雲之蔽月</a>
+
+
+  
+
+  
+
+  
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">
+    
+      髣髴兮若輕雲之蔽月
+    
+  </a>
 </div>
 
 <nav class="site-navbar">
   <ul id="menu" class="menu">
-    <li class="menu-item">
-        <a class="menu-item-link" href="/">Home</a>
-      </li><li class="menu-item">
-        <a class="menu-item-link" href="/post/">Archives</a>
-      </li><li class="menu-item">
-        <a class="menu-item-link" href="/tags/">Tags</a>
-      </li><li class="menu-item">
-        <a class="menu-item-link" href="/categories/">Categories</a>
+    
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://ariesdevil.com/">Home</a>
+          
+
+        
+
       </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://ariesdevil.com/post/">Archives</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://ariesdevil.com/tags/">Tags</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://ariesdevil.com/categories/">Categories</a>
+          
+
+        
+
+      </li>
+    
+
+    
+    
+
+    
   </ul>
 </nav>
-    </header>
 
-    <main id="main" class="main">
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
       <div class="content-wrapper">
-        <div id="content" class="content">
-          <article class="post">
+        <div id="content" class="content container">
+          <article class="post bg-white">
     
     <header class="post-header">
       <h1 class="post-title">Go 语言中的 new() 和 make() 的区别</h1>
-
+      
       <div class="post-meta">
-        <span class="post-time"> 2014-05-22 </span>
+        <time datetime="2014-05-22" class="post-time">
+          2014-05-22
+        </time>
         <div class="post-category">
-            <a href="/categories/programming-language/"> Programming Language </a>
-            </div>
+            <a href="https://ariesdevil.com/categories/programming-language/"> Programming Language </a>
+            
+          </div>
+        
+
+        
+        
+
+        
         
       </div>
     </header>
 
-    <div class="post-toc" id="post-toc">
+    
+    
+<div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#概述">概述</a></li>
-<li><a href="#new-的主要特性">new 的主要特性</a></li>
-<li><a href="#make-的主要特性">make 的主要特性</a></li>
-<li><a href="#总结">总结</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#概述">概述</a></li>
+    <li><a href="#new-的主要特性">new 的主要特性</a></li>
+    <li><a href="#make-的主要特性">make 的主要特性</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
 </nav>
   </div>
 </div>
+
+    
     <div class="post-content">
       <h2 id="概述">概述</h2>
-
 <p>Go 语言中的 <code>new</code> 和 <code>make</code> 一直是新手比较容易混淆的东西，咋一看很相似。不过解释两者之间的不同也非常容易。</p>
-
 <h2 id="new-的主要特性">new 的主要特性</h2>
-
 <p>首先 <code>new</code> 是内建函数，你可以从 <a href="http://golang.org/pkg/builtin/#new">http://golang.org/pkg/builtin/#new</a> 这儿看到它，它的定义也很简单：</p>
-
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nb">new</span><span class="p">(</span><span class="nx">Type</span><span class="p">)</span> <span class="o">*</span><span class="nx">Type</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nb">new</span><span class="p">(</span><span class="nx">Type</span><span class="p">)</span> <span class="o">*</span><span class="nx">Type</span></span></span></code></pre></td></tr></table>
 </div>
 </div>
-
 <p>官方文档对于它的描述是：</p>
-
 <blockquote>
 <p>内建函数 <code>new</code> 用来分配内存，它的第一个参数是一个类型，不是一个值，它的返回值是一个指向新分配类型零值的指针</p>
 </blockquote>
-
 <p>根据这段描述，我们可以自己实现一个类似 <code>new</code> 的功能：</p>
-
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -191,61 +296,56 @@ Go 语言中的 new 和 make 一直是新手比较容易混淆的东西，咋一
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">newInt</span><span class="p">()</span> <span class="o">*</span><span class="kt">int</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">i</span> <span class="kt">int</span>
-  <span class="k">return</span> <span class="o">&amp;</span><span class="nx">i</span>
-<span class="p">}</span>
-
-<span class="nx">someInt</span> <span class="o">:=</span> <span class="nf">newInt</span><span class="p">()</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">newInt</span><span class="p">()</span> <span class="o">*</span><span class="kt">int</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">i</span> <span class="kt">int</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="o">&amp;</span><span class="nx">i</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">someInt</span> <span class="o">:=</span> <span class="nf">newInt</span><span class="p">()</span></span></span></code></pre></td></tr></table>
 </div>
 </div>
-
 <p>我们这个函数的功能跟 <code>someInt := new(int)</code> 一模一样。所以在我们自己定义 new 开头的函数时，出于约定也应该返回类型的指针。</p>
-
 <h2 id="make-的主要特性">make 的主要特性</h2>
-
 <p><code>make</code> 也是内建函数，你可以从 <a href="http://golang.org/pkg/builtin/#make">http://golang.org/pkg/builtin/#make</a> 这儿看到它，它的定义比 <code>new</code> 多了一个参数，返回值也不同：</p>
-
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nb">make</span><span class="p">(</span><span class="nx">Type</span><span class="p">,</span> <span class="nx">size</span> <span class="nx">IntegerType</span><span class="p">)</span> <span class="nx">Type</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nb">make</span><span class="p">(</span><span class="nx">Type</span><span class="p">,</span> <span class="nx">size</span> <span class="nx">IntegerType</span><span class="p">)</span> <span class="nx">Type</span></span></span></code></pre></td></tr></table>
 </div>
 </div>
-
 <p>官方文档对于它的描述是：</p>
-
 <blockquote>
 <p>内建函数 <code>make</code> 用来为 <code>slice</code>，<code>map</code> 或 <code>chan</code> 类型分配内存和初始化一个对象(<strong>注意</strong>：只能用在这三种类型上)，跟 <code>new</code> 类似，第一个参数也是一个类型而不是一个值，跟 <code>new</code> 不同的是，<code>make</code> 返回类型的引用而不是指针，而返回值也依赖于具体传入的类型，具体说明如下：</p>
 </blockquote>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span><span class="lnt">6
 </span><span class="lnt">7
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">Slice: 第二个参数 size 指定了它的长度，它的容量和长度相同。
-你可以传入第三个参数来指定不同的容量值，但必须不能比长度值小。
-比如 make([]int, 0, 10)
-
-Map: 根据 size 大小来初始化分配内存，不过分配后的 map 长度为 0，如果 size 被忽略了，那么会在初始化分配内存时分配一个小尺寸的内存
-
-Channel: 管道缓冲区依据缓冲区容量被初始化。如果容量为 0 或者忽略容量，管道是没有缓冲区的</pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Slice: 第二个参数 size 指定了它的长度，它的容量和长度相同。
+</span></span><span class="line"><span class="cl">你可以传入第三个参数来指定不同的容量值，但必须不能比长度值小。
+</span></span><span class="line"><span class="cl">比如 make([]int, 0, 10)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Map: 根据 size 大小来初始化分配内存，不过分配后的 map 长度为 0，如果 size 被忽略了，那么会在初始化分配内存时分配一个小尺寸的内存
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Channel: 管道缓冲区依据缓冲区容量被初始化。如果容量为 0 或者忽略容量，管道是没有缓冲区的
+</span></span></code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="总结">总结</h2>
-
+</div><h2 id="总结">总结</h2>
 <p><code>new</code> 的作用是初始化一个指向类型的指针(<code>*T</code>)，<code>make</code> 的作用是为 <code>slice</code>，<code>map</code> 或 <code>chan</code> 初始化并返回引用(<code>T</code>)。</p>
     </div>
 
-    <div class="post-copyright">
+    
+    
+<div class="post-copyright">
   <p class="copyright-item">
     <span class="item-title">文章作者</span>
     <span class="item-content">AriesDevil</span>
@@ -253,20 +353,40 @@ Channel: 管道缓冲区依据缓冲区容量被初始化。如果容量为 0 �
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2014-06-01
-        
+      2014-06-01
+      
     </span>
   </p>
   
-  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
 </div>
-<footer class="post-footer">
+
+
+    
+    
+
+    <footer class="post-footer">
       <div class="post-tags">
-          <a href="/tags/golang/">golang</a>
-          </div>
+          <a href="https://ariesdevil.com/tags/golang/">golang</a>
+          
+        </div>
+
+      
       <nav class="post-nav">
-        <a class="prev" href="/post/explore-the-ownership-system-in-rust/">
-            <i class="iconfont icon-left"></i>
+        
+          <a class="prev" href="/post/explore-the-ownership-system-in-rust/">
+            
+            <i class="iconfont">
+              <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M691.908486 949.511495l75.369571-89.491197c10.963703-12.998035 10.285251-32.864502-1.499144-44.378743L479.499795 515.267417 757.434875 204.940602c11.338233-12.190647 11.035334-32.285311-0.638543-44.850487l-80.46666-86.564541c-11.680017-12.583596-30.356378-12.893658-41.662889-0.716314L257.233596 494.235404c-11.332093 12.183484-11.041474 32.266891 0.657986 44.844348l80.46666 86.564541c1.772366 1.910513 3.706415 3.533476 5.750981 4.877077l306.620399 321.703933C662.505829 963.726242 680.945807 962.528973 691.908486 949.511495z"></path>
+</svg>
+
+            </i>
             <span class="prev-text nav-default">探索 Rust 的所有权机制(Ownership System)</span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
@@ -274,10 +394,32 @@ Channel: 管道缓冲区依据缓冲区容量被初始化。如果容量为 0 �
       </nav>
     </footer>
   </article>
-        </div>
-        <div id="disqus_thread"></div>
-    <script type="text/javascript">
-    (function() {
+
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  <div class="disqus-comment">
+  <div class="disqus-button" id="load_disqus" onclick="load_disqus()">
+    显示 Disqus 评论
+  </div>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    var disqus_config = function () {
+      this.page.url = "https://ariesdevil.com/post/the-difference-between-function-new-and-make-in-golang/";
+    };
+    function load_disqus() {
       
       
       if (window.location.hostname === 'localhost') return;
@@ -286,83 +428,172 @@ Channel: 管道缓冲区依据缓冲区容量被初始化。如果容量为 0 �
       var disqus_shortname = 'ariesdevil';
       dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      $('#load_disqus').remove();
+    };
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+  
+  </div>
+
+    
 
   
 
   
 
+        </div>
       </div>
     </main>
 
     <footer id="footer" class="footer">
-      <div class="social-links">
-      <a href="mailto:se77en.cc@gmail.com" class="iconfont icon-email" title="email"></a>
-      <a href="https://twitter.com/ariesdevil77" class="iconfont icon-twitter" title="twitter"></a>
-      <a href="https://github.com/ariesdevil" class="iconfont icon-github" title="github"></a>
-      <a href="https://douban.com/people/su" class="iconfont icon-douban" title="douban"></a>
-  <a href="https://ariesdevil.com/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+      <div class="icon-links">
+  
+  
+    <a href="mailto:se77en.cc@gmail.com" rel="me noopener" class="iconfont"
+      title="email" >
+      <svg class="icon" viewBox="0 0 1451 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+    </a>
+  
+    <a href="https://twitter.com/ariesdevil77" rel="me noopener" class="iconfont"
+      title="twitter"  target="_blank"
+      >
+      <svg class="icon" viewBox="0 0 1264 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M1229.8616 18.043658c0 0-117.852626 63.135335-164.151872 67.344358-105.225559-164.151872-505.082682-92.598492-437.738325 223.078185C278.622548 312.675223 89.216542 47.506814 89.216542 47.506814s-117.852626 189.406006 75.762402 345.139833C127.097743 396.85567 55.544363 371.601535 55.544363 371.601535S26.081207 535.753407 253.368414 615.724832c-21.045112 29.463156-113.643603 8.418045-113.643603 8.418045s25.254134 143.10676 231.496229 180.987961c-143.10676 130.479693-387.230056 92.598492-370.393967 105.225559 206.242095 189.406006 1119.599946 231.496229 1128.01799-643.98042C1179.353331 249.539887 1263.533778 123.269217 1263.533778 123.269217s-130.479693 37.881201-138.897738 33.672179C1225.652577 98.015083 1229.8616 18.043658 1229.8616 18.043658"></path>
+</svg>
+
+    </a>
+  
+    <a href="https://github.com/ariesdevil" rel="me noopener" class="iconfont"
+      title="github"  target="_blank"
+      >
+      <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M512 12.672c-282.88 0-512 229.248-512 512 0 226.261333 146.688 418.133333 350.08 485.76 25.6 4.821333 34.986667-11.008 34.986667-24.618667 0-12.16-0.426667-44.373333-0.64-87.04-142.421333 30.890667-172.458667-68.693333-172.458667-68.693333C188.672 770.986667 155.008 755.2 155.008 755.2c-46.378667-31.744 3.584-31.104 3.584-31.104 51.413333 3.584 78.421333 52.736 78.421333 52.736 45.653333 78.293333 119.850667 55.68 149.12 42.581333 4.608-33.109333 17.792-55.68 32.426667-68.48-113.706667-12.8-233.216-56.832-233.216-253.013333 0-55.893333 19.84-101.546667 52.693333-137.386667-5.76-12.928-23.04-64.981333 4.48-135.509333 0 0 42.88-13.738667 140.8 52.48 40.96-11.392 84.48-17.024 128-17.28 43.52 0.256 87.04 5.888 128 17.28 97.28-66.218667 140.16-52.48 140.16-52.48 27.52 70.528 10.24 122.581333 5.12 135.509333 32.64 35.84 52.48 81.493333 52.48 137.386667 0 196.693333-119.68 240-233.6 252.586667 17.92 15.36 34.56 46.762667 34.56 94.72 0 68.522667-0.64 123.562667-0.64 140.202666 0 13.44 8.96 29.44 35.2 24.32C877.44 942.592 1024 750.592 1024 524.672c0-282.752-229.248-512-512-512"></path>
+</svg>
+
+    </a>
+  
+    <a href="https://douban.com/people/su" rel="me noopener" class="iconfont"
+      title="douban"  target="_blank"
+      >
+      <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M926.917973 37.80608C959.65184 37.80608 986.19392 64.34816 986.19392 97.082027L986.19392 926.917973C986.19392 959.65184 959.65184 986.19392 926.917973 986.19392L97.082027 986.19392C64.34816 986.19392 37.80608 959.65184 37.80608 926.917973L37.80608 97.082027C37.80608 64.34816 64.34816 37.80608 97.082027 37.80608zM176.653653 176.19968 176.653653 252.678827 825.658027 252.678827 825.658027 176.19968zM217.719467 316.146347 217.719467 628.08064 273.524053 628.08064 341.292373 770.39616 157.259093 770.39616 157.259093 845.417813 842.949973 845.417813 842.949973 770.39616 654.226773 770.39616 722.899627 628.08064 783.67744 628.08064 783.67744 316.146347zM684.885333 392.891733 684.885333 553.987413 312.576 553.987413 312.576 392.891733zM570.770773 770.39616 426.653013 770.39616 359.621973 628.08064 639.443627 628.08064z"></path>
+</svg>
+
+    </a>
+
+
+<a href="https://ariesdevil.com/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+    class="iconfont" title="rss" target="_blank">
+    <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="30" height="30">
+  <path d="M819.157333 1024C819.157333 574.592 449.408 204.8 0 204.8V0c561.706667 0 1024 462.293333 1024 1024h-204.842667zM140.416 743.04a140.8 140.8 0 0 1 140.501333 140.586667A140.928 140.928 0 0 1 140.074667 1024C62.72 1024 0 961.109333 0 883.626667s62.933333-140.544 140.416-140.586667zM678.784 1024h-199.04c0-263.210667-216.533333-479.786667-479.744-479.786667V345.173333c372.352 0 678.784 306.517333 678.784 678.826667z"></path>
+</svg>
+
+  </a>
+  
 </div>
 
 <div class="copyright">
   <span class="power-by">
-    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    主题 - 
-    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
   </span>
-
-  
 
   <span class="copyright-year">
-    &copy; 
-    2017 - 
-    2020
+    &copy;
+    
+      2017 -
+    2022
     <span class="heart">
-      <i class="iconfont icon-heart"></i>
-    </span>
-    <span class="author">AriesDevil</span>
-  </span>
+      
+      <i class="iconfont">
+        <svg class="icon" viewBox="0 0 1025 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="14" height="14">
+  <path d="M1000.1 247.9c-15.5-37.3-37.6-70.6-65.7-98.9-54.4-54.8-125.8-85-201-85-85.7 0-166 39-221.4 107.4C456.6 103 376.3 64 290.6 64c-75.1 0-146.5 30.4-201.1 85.6-28.2 28.5-50.4 61.9-65.8 99.3-16 38.8-24 79.9-23.6 122.2 0.7 91.7 40.1 177.2 108.1 234.8 3.1 2.6 6 5.1 8.9 7.8 14.9 13.4 58 52.8 112.6 102.7 93.5 85.5 209.9 191.9 257.5 234.2 7 6.1 15.8 9.5 24.9 9.5 9.2 0 18.1-3.4 24.9-9.5 34.5-30.7 105.8-95.9 181.4-165 74.2-67.8 150.9-138 195.8-178.2 69.5-57.9 109.6-144.4 109.9-237.3 0.1-42.5-8-83.6-24-122.2z"
+   fill="#8a8a8a"></path>
+</svg>
+
+      </i>
+    </span><span class="author">
+        AriesDevil
+        
+      </span></span>
+
+  
+  
+
+  
 </div>
+
     </footer>
 
     <div class="back-to-top" id="back-to-top">
-      <i class="iconfont icon-up"></i>
+      <i class="iconfont">
+        
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="35" height="35">
+  <path d="M510.866688 227.694839 95.449397 629.218702l235.761562 0-2.057869 328.796468 362.40389 0L691.55698 628.188232l241.942331-3.089361L510.866688 227.694839zM63.840492 63.962777l894.052392 0 0 131.813095L63.840492 195.775872 63.840492 63.962777 63.840492 63.962777zM63.840492 63.962777"></path>
+</svg>
+
+      </i>
     </div>
   </div>
   
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
 
 
 
-<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+
+<script type="text/javascript" src="/js/main.638251f4230630f0335d8c6748e53a96f94b72670920b60c09a56fdc8bece214.js" integrity="sha256-Y4JR9CMGMPAzXYxnSOU6lvlLcmcJILYMCaVv3Ivs4hQ=" crossorigin="anonymous"></script>
+
+
+
   <script type="text/javascript">
     window.MathJax = {
-      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
-      TeX: {equationNumbers: {autoNumber: "AMS"}},
       showProcessingMessages: false,
       messageStyle: 'none'
     };
   </script>
-  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
 
 
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-47298019-3', 'auto');
-	ga('set', 'anonymizeIp', true);
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
